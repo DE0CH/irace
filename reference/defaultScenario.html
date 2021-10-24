@@ -183,7 +183,7 @@ The scenario list contains the following elements:</p><ul>
      <dt><code>parallel</code></dt><dd><p>Number of calls to <code>targetRunner</code> to execute in parallel. Values <code>0</code> or <code>1</code> mean no parallelization. (Default: <code>0</code>)</p></dd>
      <dt><code>loadBalancing</code></dt><dd><p>Enable/disable load-balancing when executing experiments in parallel. Load-balancing makes better use of computing resources, but increases communication overhead. If this overhead is large, disabling load-balancing may be faster. (Default: <code>1</code>)</p></dd>
      <dt><code>mpi</code></dt><dd><p>Enable/disable MPI. Use <code>Rmpi</code> to execute <code>targetRunner</code> in parallel (parameter <code>parallel</code> is the number of slaves). (Default: <code>0</code>)</p></dd>
-     <dt><code>batchmode</code></dt><dd><p>Specify how irace waits for jobs to finish when <code>targetRunner</code> submits jobs to a batch cluster: sge, pbs, torque or slurm. <code>targetRunner</code> must submit jobs to the cluster using, for example, <code>qsub</code>. (Default: <code>0</code>)</p></dd>
+     <dt><code>batchmode</code></dt><dd><p>Specify how irace waits for jobs to finish when <code>targetRunner</code> submits jobs to a batch cluster: sge, pbs, torque, slurm or htcondor. <code>targetRunner</code> must submit jobs to the cluster using, for example, <code>qsub</code>. (Default: <code>0</code>)</p></dd>
    
 </dl></li>
 <li><p>Initial configurations:</p><dl>

@@ -117,6 +117,7 @@
 </h1>
 <ul>
 <li><p>This version includes handling of dependent parameter domains. These should be specified in the parameter domain definition and, for now, only numerical parameter can define dependent domains. A numerical domain can be dependent on one bound, e.g. <code>(1, param1*2))</code>, where the dependent bound can include basic arithmetic operators. (Leslie Pérez Cáceres, Manuel López-Ibáñez)</p></li>
+<li><p>Added support for HTCondor cluster framework to <code>--batchmode</code>. (Filippo Bistaffa)</p></li>
 <li><p>New scenario option <code>minMeasurableTime</code> (Manuel López-Ibáñez)</p></li>
 <li><p>The user-guide now contains a detailed section on “Hyper-parameter optimization of machine learning methods”. (Manuel López-Ibáñez)</p></li>
 <li><p>When <code>testType="F-test"</code> and only two configurations remain, the elimination test now uses the pseudo-median estimated by the Wilcoxon signed-rank test to decide which configuration is the best one instead of comparing the median difference. (Manuel López-Ibáñez)</p></li>
