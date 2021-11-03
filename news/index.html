@@ -352,7 +352,7 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>      $ <span class="ex">irace</span> -s scenario/scenario.txt --target-runner ./target-runner</span></code></pre></div>
 <p>irace will search for <code>"./target-runner"</code>. (Manuel López-Ibáñez)</p>
 <ul>
-<li><p>New command-line wrapper for Windows installed at <code><a href="https://rdrr.io/r/base/system.file.html">system.file("bin/irace.bat", package="irace")</a></code> (thanks to Anthony Antoun)</p></li>
+<li><p>New command-line wrapper for Windows installed at <code>system.file("bin/irace.bat", package="irace")</code> (thanks to Anthony Antoun)</p></li>
 <li><p>Budget can be specified as maximum time (<code>maxTime</code>, <code>--max-time</code>) consumed by the target algorithm. See the documentation for the details about how this is handled. (Leslie Pérez Cáceres, Manuel López-Ibáñez)</p></li>
 </ul>
 </div>
@@ -441,7 +441,7 @@
 <li><p>The parameters <code>expName</code> and <code>expDescription</code> are now useless and they were removed.</p></li>
 <li><p>Faster computation of similar candidates (Jeremie Dubois-Lacoste and Leslie Pérez Cáceres).</p></li>
 <li><p>Fix bug when saving instances in <code>tunerResults$experiments</code>.</p></li>
-<li><p><code><a href="../reference/irace.cmdline.html">irace.cmdline ("--help")</a></code> does not try to quit R anymore.</p></li>
+<li><p><code>irace.cmdline ("--help")</code> does not try to quit R anymore.</p></li>
 </ul>
 </div>
     <div id="irace-101" class="section level1">
