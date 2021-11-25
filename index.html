@@ -162,15 +162,15 @@
 <p>Once installed, test that it is working by doing:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>    <span class="op">$</span><span class="st"> </span>R</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(irace)</span>
-<span id="cb8-3"><a href="#cb8-3"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    [<span class="dv">1</span>] <span class="st">"~/R/irace"</span></span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>, <span class="st">"bin"</span>, <span class="dt">mustWork=</span><span class="ot">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    [<span class="dv">1</span>] <span class="st">"/home/user/R/irace/bin"</span></span></code></pre></div>
 <p>The last command tells you the installation directory of <code>irace</code>.</p>
 <div id="gnulinux-and-os-x" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gnulinux-and-os-x" class="anchor"></a>GNU/Linux and OS X</h2>
 <p>Save the installation directory of <code>irace</code> to a variable, and add it to your <code>.bash_profile</code>, <code>.bashrc</code> or <code>.profile</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>    <span class="bu">export</span> <span class="va">IRACE_HOME=</span>~/R/irace/ <span class="co"># Path given by system.file(package="irace")</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>    <span class="bu">export</span> <span class="va">PATH=${IRACE_HOME}</span>/bin/:<span class="va">$PATH</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>    <span class="bu">export</span> <span class="va">IRACE_HOME=</span>/home/user/R/irace/bin/ <span class="co"># Path given by system.file(package="irace", "bin", mustWork=TRUE)</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="bu">export</span> <span class="va">PATH=${IRACE_HOME}</span>:<span class="va">$PATH</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>    <span class="co"># export R_LIBS=~/R:${R_LIBS} # Only if local installation was forced</span></span></code></pre></div>
 <p>After adding this and opening a new terminal, you should be able to invoke <code>irace</code> as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a>    $ <span class="ex">irace</span> --help</span></code></pre></div>
