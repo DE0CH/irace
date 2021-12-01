@@ -24,6 +24,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">irace</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Github version">3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">3.5</span>
       </span>
     </div>
 
@@ -54,7 +56,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/MLopez-Ibanez/irace/">
+  <a href="https://github.com/MLopez-Ibanez/irace/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -72,86 +74,87 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="irace-iterated-racing-for-automatic-algorithm-configuration" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#irace-iterated-racing-for-automatic-algorithm-configuration" class="anchor"></a><strong>irace</strong>: Iterated Racing for Automatic Algorithm Configuration</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="irace-iterated-racing-for-automatic-algorithm-configuration">
+<strong>irace</strong>: Iterated Racing for Automatic Algorithm Configuration<a class="anchor" aria-label="anchor" href="#irace-iterated-racing-for-automatic-algorithm-configuration"></a>
+</h1></div>
 <!-- badges: start -->
 
-<p>[ <a href="http://iridia.ulb.ac.be/irace/"><strong>Homepage</strong></a> ] [ <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf"><strong>User Guide (PDF)</strong></a> ]</p>
-<p><strong>Maintainers:</strong> <a href="http://lopez-ibanez.eu">Manuel López-Ibáñez</a>, Leslie Pérez Cáceres</p>
-<p><strong>Creators:</strong> <a href="http://lopez-ibanez.eu">Manuel López-Ibáñez</a>, Jérémie Dubois-Lacoste</p>
+<p>[ <a href="http://iridia.ulb.ac.be/irace/" class="external-link"><strong>Homepage</strong></a> ] [ <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf" class="external-link"><strong>User Guide (PDF)</strong></a> ]</p>
+<p><strong>Maintainers:</strong> <a href="http://lopez-ibanez.eu" class="external-link">Manuel López-Ibáñez</a>, Leslie Pérez Cáceres</p>
+<p><strong>Creators:</strong> <a href="http://lopez-ibanez.eu" class="external-link">Manuel López-Ibáñez</a>, Jérémie Dubois-Lacoste</p>
 <p><strong>Contributors:</strong> Jérémie Dubois-Lacoste, Thomas Stützle, Mauro Birattari, Eric Yuan and Prasanna Balaprakash.</p>
-<p><strong>Contact:</strong> <a href="https://groups.google.com/d/forum/irace-package" class="uri">https://groups.google.com/d/forum/irace-package</a></p>
+<p><strong>Contact:</strong> <a href="https://groups.google.com/d/forum/irace-package" class="external-link uri">https://groups.google.com/d/forum/irace-package</a></p>
 <hr>
 </div>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
 <p>The <strong>irace</strong> package implements the Iterated Race method, which is a generalization of the Iterated F-race method for the automatic configuration of optimization algorithms, that is, the tuning of their parameters by finding the most appropriate settings given a set of instances of an optimization problem. It builds upon the race package by Birattari and it is implemented in R.</p>
 <p><strong>Keywords:</strong> automatic configuration, offline tuning, parameter tuning, racing, F-race.</p>
 <p><strong>Relevant literature:</strong></p>
-<ol>
-<li><p>M. López-Ibáñez, J. Dubois-Lacoste, L. Pérez Cáceres, T. Stützle, and M. Birattari. <a href="http://dx.doi.org/10.1016/j.orp.2016.09.002">The irace package: Iterated Racing for Automatic Algorithm Configuration</a>. <em>Operations Research Perspectives</em>, 3:43–58, 2016.<br> [ <a href="http://lopez-ibanez.eu/LopezIbanez_bib.html#LopDubPerStuBir2016irace">bibtex</a> | doi: <a href="http://dx.doi.org/10.1016/j.orp.2016.09.002">10.1016/j.orp.2016.09.002</a> ]</p></li>
-<li><p>Manuel López-Ibáñez, Jérémie Dubois-Lacoste, Thomas Stützle, and Mauro Birattari. <a href="http://iridia.ulb.ac.be/IridiaTrSeries/IridiaTr2011-004.pdf">The irace package, Iterated Race for Automatic Algorithm Configuration</a>. Technical Report TR/IRIDIA/2011-004, IRIDIA, Université libre de Bruxelles, Belgium, 2011.<br> [ <a href="http://iridia.ulb.ac.be/~manuel/LopezIbanez_bib.html#LopDubStu2011irace">bibtex</a> | <a href="http://iridia.ulb.ac.be/IridiaTrSeries/IridiaTr2011-004.pdf">PDF</a> ]</p></li>
-<li><p>Thomas Stützle and Manuel López-Ibáñez. <a href="https://doi.org/10.1145/3449726.3461404">Tutorial: Automated algorithm configuration and design</a>. GECCO ’21: Proceedings of the Genetic and Evolutionary Computation Conference Companion, July 2021. <a href="https://doi.org/10.1145/3449726.3461404">doi:10.1145/3449726.3461404</a></p></li>
+<ol style="list-style-type: decimal">
+<li><p>M. López-Ibáñez, J. Dubois-Lacoste, L. Pérez Cáceres, T. Stützle, and M. Birattari. <a href="http://dx.doi.org/10.1016/j.orp.2016.09.002" class="external-link">The irace package: Iterated Racing for Automatic Algorithm Configuration</a>. <em>Operations Research Perspectives</em>, 3:43–58, 2016.<br> [ <a href="http://lopez-ibanez.eu/LopezIbanez_bib.html#LopDubPerStuBir2016irace" class="external-link">bibtex</a> | doi: <a href="http://dx.doi.org/10.1016/j.orp.2016.09.002" class="external-link">10.1016/j.orp.2016.09.002</a> ]</p></li>
+<li><p>Manuel López-Ibáñez, Jérémie Dubois-Lacoste, Thomas Stützle, and Mauro Birattari. <a href="http://iridia.ulb.ac.be/IridiaTrSeries/IridiaTr2011-004.pdf" class="external-link">The irace package, Iterated Race for Automatic Algorithm Configuration</a>. Technical Report TR/IRIDIA/2011-004, IRIDIA, Université libre de Bruxelles, Belgium, 2011.<br> [ <a href="http://iridia.ulb.ac.be/~manuel/LopezIbanez_bib.html#LopDubStu2011irace" class="external-link">bibtex</a> | <a href="http://iridia.ulb.ac.be/IridiaTrSeries/IridiaTr2011-004.pdf" class="external-link">PDF</a> ]</p></li>
+<li><p>Thomas Stützle and Manuel López-Ibáñez. <a href="https://doi.org/10.1145/3449726.3461404" class="external-link">Tutorial: Automated algorithm configuration and design</a>. GECCO ’21: Proceedings of the Genetic and Evolutionary Computation Conference Companion, July 2021. <a href="https://doi.org/10.1145/3449726.3461404" class="external-link">doi:10.1145/3449726.3461404</a></p></li>
 </ol>
-<div id="requisites" class="section level2">
-<h2 class="hasAnchor">
-<a href="#requisites" class="anchor"></a>Requisites</h2>
+<div class="section level2">
+<h2 id="requisites">Requisites<a class="anchor" aria-label="anchor" href="#requisites"></a>
+</h2>
 <ul>
-<li>R (<a href="https://www.r-project.org" class="uri">https://www.r-project.org</a>) is required for running irace, but you don’t need to know the R language to use it.</li>
+<li>R (<a href="https://www.r-project.org" class="external-link uri">https://www.r-project.org</a>) is required for running irace, but you don’t need to know the R language to use it.</li>
 </ul>
 </div>
-<div id="user-guide" class="section level2">
-<h2 class="hasAnchor">
-<a href="#user-guide" class="anchor"></a>User guide</h2>
-<p>A complete <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf">user guide</a> comes with the package. You can access it online or, after installing the irace package, invoking from R the following command:</p>
+<div class="section level2">
+<h2 id="user-guide">User guide<a class="anchor" aria-label="anchor" href="#user-guide"></a>
+</h2>
+<p>A complete <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf" class="external-link">user guide</a> comes with the package. You can access it online or, after installing the irace package, invoking from R the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">        <span class="va">R</span><span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"irace-package"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">        <span class="va">R</span><span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"irace-package"</span><span class="op">)</span></code></pre></div>
 <p>The following is a quick-start guide. The user guide gives more detailed instructions.</p>
 </div>
 </div>
-<div id="installing-r" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-r" class="anchor"></a>Installing R</h1>
-<p>The official instructions are available at <a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html" class="uri">https://cran.r-project.org/doc/manuals/r-release/R-admin.html</a>. We give below a quick R installation guide that will work in most cases.</p>
-<div id="gnulinux" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gnulinux" class="anchor"></a>GNU/Linux</h2>
+<div class="section level1">
+<h1 id="installing-r">Installing R<a class="anchor" aria-label="anchor" href="#installing-r"></a>
+</h1>
+<p>The official instructions are available at <a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html" class="external-link uri">https://cran.r-project.org/doc/manuals/r-release/R-admin.html</a>. We give below a quick R installation guide that will work in most cases.</p>
+<div class="section level2">
+<h2 id="gnulinux">GNU/Linux<a class="anchor" aria-label="anchor" href="#gnulinux"></a>
+</h2>
 <p>You should install R from your package manager. On a Debian/Ubuntu system it will be something like:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">$</span><span class="st"> </span>sudo apt<span class="op">-</span>get install r<span class="op">-</span>base</span></code></pre></div>
 <p>Once R is installed, you can launch R from the Terminal and from the R prompt install the irace package. See instructions below.</p>
 </div>
-<div id="os-x" class="section level2">
-<h2 class="hasAnchor">
-<a href="#os-x" class="anchor"></a>OS X</h2>
-<p>You can install R directly from a CRAN mirror (<a href="https://cran.r-project.org/bin/macosx/" class="uri">https://cran.r-project.org/bin/macosx/</a>).</p>
+<div class="section level2">
+<h2 id="os-x">OS X<a class="anchor" aria-label="anchor" href="#os-x"></a>
+</h2>
+<p>You can install R directly from a CRAN mirror (<a href="https://cran.r-project.org/bin/macosx/" class="external-link uri">https://cran.r-project.org/bin/macosx/</a>).</p>
 <p>Alternatively, if you use homebrew, you can just brew the R formula from the science tap (unfortunately it does not come already bottled so you need to have Xcode installed to compile it):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a>    $ <span class="ex">brew</span> tap homebrew/science</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    $ <span class="ex">brew</span> install r</span></code></pre></div>
 <p>Once R is installed, you can launch R from the Terminal (or from your Applications), and from the R prompt install the irace package. See instructions below.</p>
 </div>
-<div id="windows" class="section level2">
-<h2 class="hasAnchor">
-<a href="#windows" class="anchor"></a>Windows</h2>
-<p>You can install R from a CRAN mirror (<a href="https://cran.r-project.org/bin/windows/" class="uri">https://cran.r-project.org/bin/windows/</a>). Once R is installed, you can launch the R console and install the irace package from it. See instructions below.</p>
+<div class="section level2">
+<h2 id="windows">Windows<a class="anchor" aria-label="anchor" href="#windows"></a>
+</h2>
+<p>You can install R from a CRAN mirror (<a href="https://cran.r-project.org/bin/windows/" class="external-link uri">https://cran.r-project.org/bin/windows/</a>). Once R is installed, you can launch the R console and install the irace package from it. See instructions below.</p>
 </div>
 </div>
-<div id="installing-the-irace-package" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-the-irace-package" class="anchor"></a>Installing the irace package</h1>
-<p>There are two methods for installing the <a href="http://iridia.ulb.ac.be/irace">irace</a> R package on your computer:</p>
-<ol>
+<div class="section level1">
+<h1 id="installing-the-irace-package">Installing the irace package<a class="anchor" aria-label="anchor" href="#installing-the-irace-package"></a>
+</h1>
+<p>There are two methods for installing the <a href="http://iridia.ulb.ac.be/irace" class="external-link">irace</a> R package on your computer:</p>
+<ol style="list-style-type: decimal">
 <li>Install within R (automatic download):</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>        <span class="op">$</span><span class="st"> </span>R</span>
 <span id="cb4-2"><a href="#cb4-2"></a>        R<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"irace"</span>)</span></code></pre></div>
 <p>select a mirror close to you, and test the installation with</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">        <span class="va">R</span><span class="op">&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://iridia.ulb.ac.be/irace">irace</a></span><span class="op">)</span>
+<code class="sourceCode R">        <span class="va">R</span><span class="op">&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://iridia.ulb.ac.be/irace" class="external-link">irace</a></span><span class="op">)</span>
         <span class="va">R</span><span class="op">&gt;</span> <span class="va">CTRL</span><span class="op">+</span><span class="va">d</span></code></pre></div>
-<ol>
-<li>Manually <a href="https://cran.r-project.org/package=irace">download the package from CRAN</a> and invoke at the command-line:</li>
+<ol start="2" style="list-style-type: decimal">
+<li>Manually <a href="https://cran.r-project.org/package=irace" class="external-link">download the package from CRAN</a> and invoke at the command-line:</li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a>        $ <span class="ex">R</span> CMD INSTALL <span class="op">&lt;</span>package<span class="op">&gt;</span></span></code></pre></div>
 <p>where <code>&lt;package&gt;</code> is one of the three versions available: <code>.tar.gz</code> (Unix/BSD/GNU/Linux), <code>.tgz</code> (MacOS X), or <code>.zip</code> (Windows).</p>
@@ -165,9 +168,9 @@
 <span id="cb8-3"><a href="#cb8-3"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>, <span class="st">"bin"</span>, <span class="dt">mustWork=</span><span class="ot">TRUE</span>)</span>
 <span id="cb8-4"><a href="#cb8-4"></a>    [<span class="dv">1</span>] <span class="st">"/home/user/R/irace/bin"</span></span></code></pre></div>
 <p>The last command tells you the installation directory of <code>irace</code>.</p>
-<div id="gnulinux-and-os-x" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gnulinux-and-os-x" class="anchor"></a>GNU/Linux and OS X</h2>
+<div class="section level2">
+<h2 id="gnulinux-and-os-x">GNU/Linux and OS X<a class="anchor" aria-label="anchor" href="#gnulinux-and-os-x"></a>
+</h2>
 <p>Save the installation directory of <code>irace</code> to a variable, and add it to your <code>.bash_profile</code>, <code>.bashrc</code> or <code>.profile</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>    <span class="bu">export</span> <span class="va">IRACE_HOME=</span>/home/user/R/irace/bin/ <span class="co"># Path given by system.file(package="irace", "bin", mustWork=TRUE)</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>    <span class="bu">export</span> <span class="va">PATH=${IRACE_HOME}</span>:<span class="va">$PATH</span></span>
@@ -175,28 +178,28 @@
 <p>After adding this and opening a new terminal, you should be able to invoke <code>irace</code> as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a>    $ <span class="ex">irace</span> --help</span></code></pre></div>
 </div>
-<div id="windows-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#windows-1" class="anchor"></a>Windows</h2>
+<div class="section level2">
+<h2 id="windows-1">Windows<a class="anchor" aria-label="anchor" href="#windows-1"></a>
+</h2>
 <p>If the installation directory of <code>irace</code> is <code>C:/R/irace/</code>, you can invoke <code>irace</code> by opening a terminal (launch the program <code>cmd.exe</code>) and executing:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a>    <span class="ex">C</span>:<span class="dt">\&gt;</span> C:\R\irace\bin\x64\irace.exe --help</span></code></pre></div>
 <p>or if you are in a 32-bits system, executing:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a>    <span class="ex">C</span>:<span class="dt">\&gt;</span> C:\R\irace\bin\i386\irace.exe --help</span></code></pre></div>
 <p>You can also launch irace by opening the R console and executing:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">R</span><span class="op">&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://iridia.ulb.ac.be/irace">irace</a></span><span class="op">)</span>
+<code class="sourceCode R">    <span class="va">R</span><span class="op">&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://iridia.ulb.ac.be/irace" class="external-link">irace</a></span><span class="op">)</span>
     <span class="va">R</span><span class="op">&gt;</span> <span class="fu"><a href="reference/irace.cmdline.html">irace.cmdline</a></span><span class="op">(</span><span class="st">"--help"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="usage" class="section level1">
-<h1 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h1>
-<ol>
+<div class="section level1">
+<h1 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h1>
+<ol style="list-style-type: decimal">
 <li>Create a directory for storing the tuning scenario setup</li>
 </ol>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a>        $ <span class="fu">mkdir</span> ~/tuning</span>
 <span id="cb14-2"><a href="#cb14-2"></a>        $ <span class="bu">cd</span> ~/tuning</span></code></pre></div>
-<ol>
+<ol start="2" style="list-style-type: decimal">
 <li>Copy the template and example files to the scenario directory</li>
 </ol>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a>        $ <span class="fu">cp</span> <span class="va">$IRACE_HOME</span>/templates/*.tmpl .</span></code></pre></div>
@@ -205,7 +208,7 @@
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>        <span class="op">$</span><span class="st"> </span>R</span>
 <span id="cb17-2"><a href="#cb17-2"></a>        <span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(irace)</span>
 <span id="cb17-3"><a href="#cb17-3"></a>        <span class="op">&gt;</span><span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>)</span></code></pre></div>
-<ol>
+<ol start="3" style="list-style-type: decimal">
 <li>
 <p>For each template in your tuning directory, remove the <code>.tmpl</code> suffix, and modify them following the instructions in each file. In particular,</p>
 <ul>
@@ -221,45 +224,45 @@
 <div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>performs one run of Iterated Race. See the output of <span class="st">`</span><span class="dt">irace --help</span><span class="st">`</span> <span class="cf">for</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>additional irace parameters. Command<span class="op">-</span>line parameters override the</span>
 <span id="cb19-3"><a href="#cb19-3"></a>scenario setup specified <span class="cf">in</span> the <span class="st">`</span><span class="dt">scenario.txt</span><span class="st">`</span> file.</span></code></pre></div>
-<div id="many-tuning-runs-in-parallel" class="section level2">
-<h2 class="hasAnchor">
-<a href="#many-tuning-runs-in-parallel" class="anchor"></a>Many tuning runs in parallel</h2>
+<div class="section level2">
+<h2 id="many-tuning-runs-in-parallel">Many tuning runs in parallel<a class="anchor" aria-label="anchor" href="#many-tuning-runs-in-parallel"></a>
+</h2>
 <p>For executing several repetitions of irace in parallel, call the program</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a>    $ <span class="bu">cd</span> ~/tuning/ <span class="kw">&amp;&amp;</span> <span class="va">$IRACE_HOME</span><span class="ex">/bin/parallel-irace</span> N</span></code></pre></div>
 <p>where N is the number of repetitions. By default, the execution directory of each run of irace will be set to <code>./execdir-dd</code>, where <code>dd</code> is a number padded with zeroes.</p>
 <p><strong>Be careful</strong>, <code>parallel-irace</code> will create these directories from scratch, deleting them first if they already exist.</p>
 <p>Check the help of <code>parallel-irace</code> by running it without parameters.</p>
 </div>
-<div id="parallelize-one-tuning" class="section level2">
-<h2 class="hasAnchor">
-<a href="#parallelize-one-tuning" class="anchor"></a>Parallelize one tuning</h2>
-<p>A single run of irace can be done much faster by executing the calls to <code>targetRunner</code> (the runs of the algorithm being tuned) in parallel. See the <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf">user guide</a> for the details.</p>
+<div class="section level2">
+<h2 id="parallelize-one-tuning">Parallelize one tuning<a class="anchor" aria-label="anchor" href="#parallelize-one-tuning"></a>
+</h2>
+<p>A single run of irace can be done much faster by executing the calls to <code>targetRunner</code> (the runs of the algorithm being tuned) in parallel. See the <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf" class="external-link">user guide</a> for the details.</p>
 </div>
 </div>
-<div id="license" class="section level1">
-<h1 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h1>
+<div class="section level1">
+<h1 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h1>
 <p><strong>irace</strong> is Copyright (C) 2010-2020 Manuel López-Ibáñez, Jérémie Dubois-Lacoste and Leslie Pérez-Cáceres.</p>
 <p>This program is free software (software libre); you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
-<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href="https://cran.r-project.org/web/licenses/GPL-3">GNU General Public License</a> for more details.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link">GNU General Public License</a> for more details.</p>
 <p><strong>IMPORTANT NOTE:</strong> Please be aware that the fact that this program is released as Free Software does not excuse you from scientific propriety, which obligates you to give appropriate credit! If you write a scientific paper describing research that made substantive use of this program, it is your obligation as a scientist to (a) mention the fashion in which this software was used in the Methods section; (b) mention the algorithm in the References section. The appropriate citation is:</p>
 <ul>
-<li>Manuel López-Ibáñez, Jérémie Dubois-Lacoste, Leslie Pérez Cáceres, Thomas Stützle, and Mauro Birattari. <a href="http://dx.doi.org/10.1016/j.orp.2016.09.002"><strong>The irace package: Iterated Racing for Automatic Algorithm Configuration.</strong></a> <em>Operations Research Perspectives</em>, 2016. doi: 10.1016/j.orp.2016.09.002</li>
+<li>Manuel López-Ibáñez, Jérémie Dubois-Lacoste, Leslie Pérez Cáceres, Thomas Stützle, and Mauro Birattari. <a href="http://dx.doi.org/10.1016/j.orp.2016.09.002" class="external-link"><strong>The irace package: Iterated Racing for Automatic Algorithm Configuration.</strong></a> <em>Operations Research Perspectives</em>, 2016. doi: 10.1016/j.orp.2016.09.002</li>
 </ul>
-<p>The <strong>irace</strong> package uses code under the GPL from the <a href="https://CRAN.R-project.org/package=race">race package</a> is Copyright (C) 2003 Mauro Birattari.</p>
+<p>The <strong>irace</strong> package uses code under the GPL from the <a href="https://CRAN.R-project.org/package=race" class="external-link">race package</a> is Copyright (C) 2003 Mauro Birattari.</p>
 </div>
-<div id="building-an-irace-standalone-container" class="section level1">
-<h1 class="hasAnchor">
-<a href="#building-an-irace-standalone-container" class="anchor"></a>Building an irace standalone container</h1>
-<p>Thanks to <a href="https://sylabs.io/singularity/">Singularity</a>, you can build a standalone container of <code>irace</code> using the file <code>irace.sindef</code> which is available in the directory <code>inst/</code> in the source tarball and github repository or, after installing the irace R package, in the installation directory given by the R expression <code>system.file(package="irace")</code>. After installing SingularityCE, the container may be build using:</p>
+<div class="section level1">
+<h1 id="building-an-irace-standalone-container">Building an irace standalone container<a class="anchor" aria-label="anchor" href="#building-an-irace-standalone-container"></a>
+</h1>
+<p>Thanks to <a href="https://sylabs.io/singularity/" class="external-link">Singularity</a>, you can build a standalone container of <code>irace</code> using the file <code>irace.sindef</code> which is available in the directory <code>inst/</code> in the source tarball and github repository or, after installing the irace R package, in the installation directory given by the R expression <code>system.file(package="irace")</code>. After installing SingularityCE, the container may be build using:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>sudo singularity build irace.sindef irace.sif</span></code></pre></div>
 <p>and run with:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>singularity run irace.sif <span class="op">&lt;</span>arguments<span class="op">&gt;</span></span></code></pre></div>
 </div>
-<div id="frequently-asked-questions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#frequently-asked-questions" class="anchor"></a>Frequently Asked Questions</h1>
-<p>The <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf">user guide</a> contains a list of frequently asked questions.</p>
+<div class="section level1">
+<h1 id="frequently-asked-questions">Frequently Asked Questions<a class="anchor" aria-label="anchor" href="#frequently-asked-questions"></a>
+</h1>
+<p>The <a href="https://cran.r-project.org/package=irace/vignettes/irace-package.pdf" class="external-link">user guide</a> contains a list of frequently asked questions.</p>
 <!--
 Local Variables:
 mode: markdown
@@ -271,65 +274,73 @@ End:
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=irace">https://​cloud.r-project.org/​package=irace</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/MLopez-Ibanez/irace/">https://​github.com/​MLopez-Ibanez/​irace/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/MLopez-Ibanez/irace/issues">https://​github.com/​MLopez-Ibanez/​irace/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=irace" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/MLopez-Ibanez/irace/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/MLopez-Ibanez/irace/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>GPL (&gt;= 2)</small></li>
 </ul>
 </div>
+
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing irace</a></li>
+<li><a href="authors.html#citation">Citing irace</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Manuel López-Ibáñez <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9974-1295" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Manuel López-Ibáñez <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9974-1295" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Jérémie Dubois-Lacoste <br><small class="roles"> Author </small>  </li>
 <li>Leslie Pérez Cáceres <br><small class="roles"> Author </small>  </li>
 <li>Thomas Stützle <br><small class="roles"> Author </small>  </li>
 <li>Mauro Birattari <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=irace"><img src="https://www.r-pkg.org/badges/version-last-release/irace" alt="CRAN Status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=irace"><img src="https://cranlogs.r-pkg.org/badges/grand-total/irace" alt="CRAN Downloads"></a></li>
-<li><a href="https://github.com/MLopez-Ibanez/irace/actions"><img src="https://github.com/MLopez-Ibanez/irace/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/MLopez-Ibanez/irace?branch=master"><img src="https://codecov.io/gh/MLopez-Ibanez/irace/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://cran.r-project.org/package=irace" class="external-link"><img src="https://www.r-pkg.org/badges/version-last-release/irace" alt="CRAN Status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=irace" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/irace" alt="CRAN Downloads"></a></li>
+<li><a href="https://github.com/MLopez-Ibanez/irace/actions" class="external-link"><img src="https://github.com/MLopez-Ibanez/irace/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/MLopez-Ibanez/irace?branch=master" class="external-link"><img src="https://codecov.io/gh/MLopez-Ibanez/irace/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
-      <footer><!--<div class="copyright">
-  <p>Developed by Manuel López-Ibáñez, Jérémie Dubois-Lacoste, Leslie Pérez Cáceres, Thomas Stützle, Mauro Birattari.</p>
+      <footer><div class="copyright">
+  <p></p>
+<p>Developed by Manuel López-Ibáñez, Jérémie Dubois-Lacoste, Leslie Pérez Cáceres, Thomas Stützle, Mauro Birattari.</p>
 </div>
+
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
---></footer>
+
+      </footer>
 </div>
 
   
 
+
+  
 
   </body>
 </html>
