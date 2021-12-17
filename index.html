@@ -165,8 +165,8 @@
 <p>Once installed, test that it is working by doing:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>    <span class="op">$</span><span class="st"> </span>R</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(irace)</span>
-<span id="cb8-3"><a href="#cb8-3"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>, <span class="st">"bin"</span>, <span class="dt">mustWork=</span><span class="ot">TRUE</span>)</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    [<span class="dv">1</span>] <span class="st">"/home/user/R/irace/bin"</span></span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">cat</span>(<span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>, <span class="st">"bin"</span>, <span class="dt">mustWork=</span><span class="ot">TRUE</span>), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="op">/</span>home<span class="op">/</span>user<span class="op">/</span>R<span class="op">/</span>irace<span class="op">/</span>bin</span></code></pre></div>
 <p>The last command tells you the installation directory of <code>irace</code>.</p>
 <div class="section level2">
 <h2 id="gnulinux-and-os-x">GNU/Linux and OS X<a class="anchor" aria-label="anchor" href="#gnulinux-and-os-x"></a>
@@ -331,7 +331,7 @@ End:
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
