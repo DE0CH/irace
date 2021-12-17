@@ -122,7 +122,7 @@
 <h2 id="gnulinux">GNU/Linux<a class="anchor" aria-label="anchor" href="#gnulinux"></a>
 </h2>
 <p>You should install R from your package manager. On a Debian/Ubuntu system it will be something like:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">$</span><span class="st"> </span>sudo apt<span class="op">-</span>get install r<span class="op">-</span>base</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span> sudo apt<span class="sc">-</span>get install r<span class="sc">-</span>base</span></code></pre></div>
 <p>Once R is installed, you can launch R from the Terminal and from the R prompt install the irace package. See instructions below.</p>
 </div>
 <div class="section level2">
@@ -130,8 +130,8 @@
 </h2>
 <p>You can install R directly from a CRAN mirror (<a href="https://cran.r-project.org/bin/macosx/" class="external-link uri">https://cran.r-project.org/bin/macosx/</a>).</p>
 <p>Alternatively, if you use homebrew, you can just brew the R formula from the science tap (unfortunately it does not come already bottled so you need to have Xcode installed to compile it):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a>    $ <span class="ex">brew</span> tap homebrew/science</span>
-<span id="cb3-2"><a href="#cb3-2"></a>    $ <span class="ex">brew</span> install r</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> brew tap homebrew/science</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> brew install r</span></code></pre></div>
 <p>Once R is installed, you can launch R from the Terminal (or from your Applications), and from the R prompt install the irace package. See instructions below.</p>
 </div>
 <div class="section level2">
@@ -147,8 +147,8 @@
 <ol style="list-style-type: decimal">
 <li>Install within R (automatic download):</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>        <span class="op">$</span><span class="st"> </span>R</span>
-<span id="cb4-2"><a href="#cb4-2"></a>        R<span class="op">&gt;</span><span class="st"> </span><span class="kw">install.packages</span>(<span class="st">"irace"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>        <span class="sc">$</span> R</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        R<span class="sc">&gt;</span> <span class="fu">install.packages</span>(<span class="st">"irace"</span>)</span></code></pre></div>
 <p>select a mirror close to you, and test the installation with</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R">        <span class="va">R</span><span class="op">&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://iridia.ulb.ac.be/irace" class="external-link">irace</a></span><span class="op">)</span>
@@ -156,35 +156,35 @@
 <ol start="2" style="list-style-type: decimal">
 <li>Manually <a href="https://cran.r-project.org/package=irace" class="external-link">download the package from CRAN</a> and invoke at the command-line:</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a>        $ <span class="ex">R</span> CMD INSTALL <span class="op">&lt;</span>package<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>        <span class="ex">$</span> R CMD INSTALL <span class="op">&lt;</span>package<span class="op">&gt;</span></span></code></pre></div>
 <p>where <code>&lt;package&gt;</code> is one of the three versions available: <code>.tar.gz</code> (Unix/BSD/GNU/Linux), <code>.tgz</code> (MacOS X), or <code>.zip</code> (Windows).</p>
 <p>If the package fails to install because of insufficient permissions, you need to force a <em>local installation</em> by doing:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a>    $ <span class="fu">mkdir</span> ~/R</span>
-<span id="cb7-2"><a href="#cb7-2"></a>    $ <span class="ex">R</span> CMD INSTALL --library=~/R irace.tar.gz</span>
-<span id="cb7-3"><a href="#cb7-3"></a>    $ <span class="bu">export</span> <span class="va">R_LIBS=</span>~/R:<span class="va">${R_LIBS}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> mkdir ~/R</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> R CMD INSTALL <span class="at">--library</span><span class="op">=</span>~/R irace.tar.gz</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> export R_LIBS=~/R:<span class="va">${R_LIBS}</span></span></code></pre></div>
 <p>Once installed, test that it is working by doing:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>    <span class="op">$</span><span class="st"> </span>R</span>
-<span id="cb8-2"><a href="#cb8-2"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(irace)</span>
-<span id="cb8-3"><a href="#cb8-3"></a>    R<span class="op">&gt;</span><span class="st"> </span><span class="kw">cat</span>(<span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>, <span class="st">"bin"</span>, <span class="dt">mustWork=</span><span class="ot">TRUE</span>), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    <span class="op">/</span>home<span class="op">/</span>user<span class="op">/</span>R<span class="op">/</span>irace<span class="op">/</span>bin</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    <span class="sc">$</span> R</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    R<span class="sc">&gt;</span> <span class="fu">library</span>(irace)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    R<span class="sc">&gt;</span> <span class="fu">cat</span>(<span class="fu">system.file</span>(<span class="at">package=</span><span class="st">"irace"</span>, <span class="st">"bin"</span>, <span class="at">mustWork=</span><span class="cn">TRUE</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">/</span>home<span class="sc">/</span>user<span class="sc">/</span>R<span class="sc">/</span>irace<span class="sc">/</span>bin</span></code></pre></div>
 <p>The last command tells you the installation directory of <code>irace</code>.</p>
 <div class="section level2">
 <h2 id="gnulinux-and-os-x">GNU/Linux and OS X<a class="anchor" aria-label="anchor" href="#gnulinux-and-os-x"></a>
 </h2>
 <p>Save the installation directory of <code>irace</code> to a variable, and add it to your <code>.bash_profile</code>, <code>.bashrc</code> or <code>.profile</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>    <span class="bu">export</span> <span class="va">IRACE_HOME=</span>/home/user/R/irace/bin/ <span class="co"># Path given by system.file(package="irace", "bin", mustWork=TRUE)</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>    <span class="bu">export</span> <span class="va">PATH=${IRACE_HOME}</span>:<span class="va">$PATH</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>    <span class="co"># export R_LIBS=~/R:${R_LIBS} # Only if local installation was forced</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>    <span class="bu">export</span> <span class="va">IRACE_HOME</span><span class="op">=</span>/home/user/R/irace/bin/ <span class="co"># Path given by system.file(package="irace", "bin", mustWork=TRUE)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">${IRACE_HOME}</span>:<span class="va">$PATH</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># export R_LIBS=~/R:${R_LIBS} # Only if local installation was forced</span></span></code></pre></div>
 <p>After adding this and opening a new terminal, you should be able to invoke <code>irace</code> as follows:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a>    $ <span class="ex">irace</span> --help</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> irace <span class="at">--help</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="windows-1">Windows<a class="anchor" aria-label="anchor" href="#windows-1"></a>
 </h2>
 <p>If the installation directory of <code>irace</code> is <code>C:/R/irace/</code>, you can invoke <code>irace</code> by opening a terminal (launch the program <code>cmd.exe</code>) and executing:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a>    <span class="ex">C</span>:<span class="dt">\&gt;</span> C:\R\irace\bin\x64\irace.exe --help</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">C:\&gt;</span> C:<span class="dt">\R\i</span>race<span class="dt">\b</span>in<span class="dt">\x</span>64<span class="dt">\i</span>race.exe <span class="at">--help</span></span></code></pre></div>
 <p>or if you are in a 32-bits system, executing:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a>    <span class="ex">C</span>:<span class="dt">\&gt;</span> C:\R\irace\bin\i386\irace.exe --help</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">C:\&gt;</span> C:<span class="dt">\R\i</span>race<span class="dt">\b</span>in<span class="dt">\i</span>386<span class="dt">\i</span>race.exe <span class="at">--help</span></span></code></pre></div>
 <p>You can also launch irace by opening the R console and executing:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R">    <span class="va">R</span><span class="op">&gt;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://iridia.ulb.ac.be/irace" class="external-link">irace</a></span><span class="op">)</span>
@@ -197,17 +197,17 @@
 <ol style="list-style-type: decimal">
 <li>Create a directory for storing the tuning scenario setup</li>
 </ol>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a>        $ <span class="fu">mkdir</span> ~/tuning</span>
-<span id="cb14-2"><a href="#cb14-2"></a>        $ <span class="bu">cd</span> ~/tuning</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>        <span class="ex">$</span> mkdir ~/tuning</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        <span class="ex">$</span> cd ~/tuning</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Copy the template and example files to the scenario directory</li>
 </ol>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a>        $ <span class="fu">cp</span> <span class="va">$IRACE_HOME</span>/templates/*.tmpl .</span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>where <span class="st">`</span><span class="dt">$IRACE_HOME</span><span class="st">`</span> is the path to the installation directory of</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="st">`</span><span class="dt">irace</span><span class="st">`</span>. It can be obtained by doing<span class="op">:</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>        <span class="op">$</span><span class="st"> </span>R</span>
-<span id="cb17-2"><a href="#cb17-2"></a>        <span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(irace)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>        <span class="op">&gt;</span><span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package=</span><span class="st">"irace"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>        <span class="ex">$</span> cp <span class="va">$IRACE_HOME</span>/templates/<span class="pp">*</span>.tmpl .</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>where <span class="st">`</span><span class="at">$IRACE_HOME</span><span class="st">`</span> is the path to the installation directory of</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">irace</span><span class="st">`</span>. It can be obtained by doing<span class="sc">:</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>        <span class="sc">$</span> R</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&gt;</span> <span class="fu">library</span>(irace)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&gt;</span> <span class="fu">system.file</span>(<span class="at">package=</span><span class="st">"irace"</span>)</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>
 <p>For each template in your tuning directory, remove the <code>.tmpl</code> suffix, and modify them following the instructions in each file. In particular,</p>
@@ -220,15 +220,15 @@
 <li><p>Put the instances in <code>~/tuning/Instances/</code>. In addition, you can create a file that specifies which instances from that directory should be run and which instance-specific parameters to use. See <code>scenario.txt.tmpl</code> and <code>instances-list.tmpl</code> for examples. The command irace will not attempt to create the execution directory (<code>execDir</code>), so it must exist before calling irace. The default <code>execDir</code> is the current directory.</p></li>
 <li><p>Calling the command:</p></li>
 </ol>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a>        $ <span class="bu">cd</span> ~/tuning/ <span class="kw">&amp;&amp;</span> <span class="va">$IRACE_HOME</span><span class="ex">/bin/irace</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>performs one run of Iterated Race. See the output of <span class="st">`</span><span class="dt">irace --help</span><span class="st">`</span> <span class="cf">for</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>additional irace parameters. Command<span class="op">-</span>line parameters override the</span>
-<span id="cb19-3"><a href="#cb19-3"></a>scenario setup specified <span class="cf">in</span> the <span class="st">`</span><span class="dt">scenario.txt</span><span class="st">`</span> file.</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>        <span class="ex">$</span> cd ~/tuning/ <span class="kw">&amp;&amp;</span> <span class="va">$IRACE_HOME</span><span class="ex">/bin/irace</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>performs one run of Iterated Race. See the output of <span class="st">`</span><span class="at">irace --help</span><span class="st">`</span> <span class="cf">for</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>additional irace parameters. Command<span class="sc">-</span>line parameters override the</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>scenario setup specified <span class="cf">in</span> the <span class="st">`</span><span class="at">scenario.txt</span><span class="st">`</span> file.</span></code></pre></div>
 <div class="section level2">
 <h2 id="many-tuning-runs-in-parallel">Many tuning runs in parallel<a class="anchor" aria-label="anchor" href="#many-tuning-runs-in-parallel"></a>
 </h2>
 <p>For executing several repetitions of irace in parallel, call the program</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a>    $ <span class="bu">cd</span> ~/tuning/ <span class="kw">&amp;&amp;</span> <span class="va">$IRACE_HOME</span><span class="ex">/bin/parallel-irace</span> N</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> cd ~/tuning/ <span class="kw">&amp;&amp;</span> <span class="va">$IRACE_HOME</span><span class="ex">/bin/parallel-irace</span> N</span></code></pre></div>
 <p>where N is the number of repetitions. By default, the execution directory of each run of irace will be set to <code>./execdir-dd</code>, where <code>dd</code> is a number padded with zeroes.</p>
 <p><strong>Be careful</strong>, <code>parallel-irace</code> will create these directories from scratch, deleting them first if they already exist.</p>
 <p>Check the help of <code>parallel-irace</code> by running it without parameters.</p>
@@ -255,9 +255,9 @@
 <h1 id="building-an-irace-standalone-container">Building an irace standalone container<a class="anchor" aria-label="anchor" href="#building-an-irace-standalone-container"></a>
 </h1>
 <p>Thanks to <a href="https://sylabs.io/singularity/" class="external-link">Singularity</a>, you can build a standalone container of <code>irace</code> using the file <code>irace.sindef</code> which is available in the directory <code>inst/</code> in the source tarball and github repository or, after installing the irace R package, in the installation directory given by the R expression <code>system.file(package="irace")</code>. After installing SingularityCE, the container may be build using:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>sudo singularity build irace.sindef irace.sif</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sudo singularity build irace.sindef irace.sif</span></code></pre></div>
 <p>and run with:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>singularity run irace.sif <span class="op">&lt;</span>arguments<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>singularity run irace.sif <span class="sc">&lt;</span>arguments<span class="sc">&gt;</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="frequently-asked-questions">Frequently Asked Questions<a class="anchor" aria-label="anchor" href="#frequently-asked-questions"></a>
