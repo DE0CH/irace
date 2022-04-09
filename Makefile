@@ -29,19 +29,21 @@ endef
 .PHONY : help build check clean install pdf rsync submit cran winbuild vignettes examples genoptions gendoc pkgdown version
 
 help:
-	@echo "quick-install  install the package without rebuilding the vignettes or generating the documentation"
-	@echo "setup          install required packages and software to build"
-	@echo "install        install the package"
-	@echo "build          build the package as a tar.gz file"
-	@echo "check          build the package and run 'R CMD check'"
-	@echo "check TEST=x   run test called test-x.R"
-	@echo "rsync          copy the package and install it on $(RNODE)"
-	@echo "cran           build the package and run 'R CMD check --as-cran'"
-	@echo "winbuild       submit the package to the WINDOWS builder service"
-	@echo "macbuild       submit the package to the MacOS builder service"
-	@echo "examples       regenerate the examples used by vignettes"
-	@echo "vignettes      generate PDF of the vignettes"
-	@echo "submit         submit the package to CRAN (read DEVEL-README first)"
+	@echo "quick-install       install the package without rebuilding the vignettes or generating the documentation"
+	@echo "setup               install required packages and software to build"
+	@echo "install             install the package"
+	@echo "build               build the package as a tar.gz file"
+	@echo "check               build the package and run 'R CMD check'"
+	@echo "check TEST=x        run test called test-x.R"
+	@echo "rsync               copy the package and install it on $(RNODE)"
+	@echo "cran                build the package and run 'R CMD check --as-cran'"
+	@echo "winbuild            submit the package to the WINDOWS builder service"
+	@echo "macbuild            submit the package to the MacOS builder service"
+	@echo "examples            regenerate the examples used by vignettes"
+	@echo "vignettes           generate PDF of the vignettes"
+	@echo "submit              submit the package to CRAN (read DEVEL-README first)"
+	@echo "docker-build        build the docker container that contains all the dependencies of this package"
+	@echo "vignettes-docker    generate PDF of the vignettes with the docker container (sidesteps dependency problems)"
 
 setup:
 	./scripts/setup.sh
@@ -114,6 +116,7 @@ endif
 
 clean: 
 	cd $(PACKAGEDIR) && (./cleanup; make -C src -f Makevars clean; git checkout --force R/version.R)
+	docker images rm irace-build
 
 ## FIXME: building the vignettes is a bit complicated and sometimes fails.
 # If \setboolean{Release}{false}, entries are taken from optbib and everything
@@ -143,6 +146,14 @@ vignettes: vignettes/$(PACKAGE)-package.Rnw vignettes/section/irace-options.tex
 	&& $(RM) $(PACKAGE)-package.tex
 # Rscript -e "library(knitr); knit('$(PACKAGE)-package.Rnw', output='$(PACKAGE)-package.tex', quiet = TRUE)" \
 # && $(PDFLATEX) $(PACKAGE)-package.tex && bibtex $(PACKAGE)-package && $(PDFLATEX) $(PACKAGE)-package.tex && $(PDFLATEX) $(PACKAGE)-package.tex && $(RM) $(PACKAGE)-package.tex
+
+vignettes-docker: docker-build
+	docker run -v ${PWD}:/usr/app --rm irace-build make vignettes
+
+docker-build:
+	git submodule init
+	git submodule update
+	docker build -t irace-build .
 
 pdf: build
 	R CMD Rd2pdf --force --no-preview --batch --output=$(BINDIR)/$(PACKAGE)_$(PACKAGEVERSION).pdf $(PACKAGEDIR)/
