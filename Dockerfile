@@ -7,7 +7,8 @@ RUN apt-get install -y \
     texlive \
     texlive-latex-extra \
     texlive-science \ 
-    cm-super
+    cm-super \ 
+    r-cran-devtools
 RUN Rscript -e 'install.packages("devtools", repos="https://cloud.r-project.org")'
 COPY . . 
 RUN R CMD INSTALL .

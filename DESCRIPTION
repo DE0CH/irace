@@ -40,5 +40,5 @@ URL: https://mlopez-ibanez.github.io/irace, https://github.com/MLopez-Ibanez/ira
 BugReports: https://github.com/MLopez-Ibanez/irace/issues
 ByteCompile: yes
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 SystemRequirements: GNU make
