@@ -1,4 +1,5 @@
 FROM ubuntu:bionic
+ARG DEBIAN_FRONTEND:noninteractive
 RUN apt-get update
 RUN apt-get install -y build-essential
 RUN apt-get install -y r-base
@@ -17,6 +18,6 @@ RUN apt-get install -y python3-pip
 WORKDIR /usr/app
 COPY . .
 RUN git clone https://github.com/iridia-ulb/references vignettes/optbib
-RUN R --slave --quiet 'install.packages("devtools", dependencies=TRUE, repos="https://cloud.r-project.org")''
-RUN R --slave --quiet 'install.packages("testthat", dependencies=TRUE, repos="https://cloud.r-project.org")''
+RUN R --slave --quiet 'install.packages("devtools", repos="https://cloud.r-project.org")''
+RUN R --slave --quiet 'install.packages("testthat", repos="https://cloud.r-project.org")''
 CMD make check
