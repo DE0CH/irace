@@ -18,6 +18,6 @@ RUN apt-get install -y python3-pip
 WORKDIR /usr/app
 COPY . .
 RUN git clone https://github.com/iridia-ulb/references vignettes/optbib
-RUN R --slave --quiet 'install.packages("devtools", repos="https://cloud.r-project.org")'
-RUN R --slave --quiet 'install.packages("testthat", repos="https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages("devtools", repos="https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages("testthat", repos="https://cloud.r-project.org")'
 CMD make check
