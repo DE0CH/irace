@@ -1,5 +1,5 @@
 FROM ubuntu:bionic
-ARG DEBIAN_FRONTEND:noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y build-essential
 RUN apt-get install -y r-base
