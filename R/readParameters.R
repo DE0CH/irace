@@ -1,3 +1,74 @@
+transform.domain <- function(transf, domain, type)
+  {
+    if (transf == "") return(transf)
+    
+    # We do not support transformation of dependent parameters, yet
+    # TODO: think about dependent domain transfomation
+    if (is.expression(domain))
+      irace.error("Parameter domain transformations are not yet available for",
+                  " dependent parameter domains.")
+
+    lower <- domain[1]
+    upper <- domain[2]
+
+    if (transf == "log") {
+      # Reject log if domain contains zero or negative values
+      if (any(domain <= 0)) return(NULL)
+
+      trLower <- log(lower)
+      # +1 to adjust before floor()
+      trUpper <- if (type == "i") log(upper + 1) else log(upper)
+      
+      irace.assert(is.finite(trLower))
+      irace.assert(is.finite(trUpper))
+      attr(transf, "lower") <- trLower
+      attr(transf, "upper") <- trUpper
+      return(transf)
+    }
+    irace.internal.error("unrecognized transformation type '", transf, "'")
+  }
+
+# *************************************************************************
+# Subordinate parameter: ordering of the parameters according to
+# conditions hierarchy
+# *  The conditions hierarchy is an acyclic directed graph.
+#    Function treeLevel() computes an order on vertex s.t:
+#    level(A) > level(B)  <=>  There is an arc A ---> B
+#    (A depends on B to be activated)
+# *  If a cycle is detected, execution is stopped
+# *  If a parameter depends on another one not defined, execution is stopped
+treeLevel <- function(paramName, varsTree, rootParam = paramName)
+  {
+    # The last parameter is used to record the root parameter of the
+    # recursive call in order to detect the presence of cycles.
+    vars <- varsTree[[paramName]]
+    if (length(vars) == 0) return (1) # This parameter does not have conditions
+
+    # This parameter has some conditions
+    # Recursive call: level <- MAX( level(m) : m in children )
+    maxChildLevel <- 0
+    for (child in vars) {
+      # The following line detects cycles
+      if (child == rootParam)
+        irace.error("A cycle detected in subordinate parameters! ",
+                    "Check definition of conditions and/or dependent domains.\n",
+                    "One parameter of this cycle is '", rootParam, "'")
+      
+      # The following line detects a missing definition
+      if (child %!in% names(varsTree))
+        irace.error("A parameter definition is missing! ",
+                    "Check definition of parameters.\n",
+                    "Parameter '", paramName,
+                    "' depends on '", child, "' which is not defined.")
+        
+      level <- treeLevel(child, varsTree, rootParam)
+      if (level > maxChildLevel)
+        maxChildLevel <- level
+    }
+    level <- maxChildLevel + 1
+    return (level)
+  }
+
 #' Reads the parameters to be tuned by \pkg{irace} from a file or from a
 #' character string.
 #' 
@@ -145,46 +216,6 @@ readParameters <- function (file, digits = 4, debugLevel = 0, text)
       return (length(domain) == 1)
     }
   }
-  # *************************************************************************
-  # Subordinate parameter: ordering of the parameters according to
-  # conditions hierarchy
-  # *  The conditions hierarchy is an acyclic directed graph.
-  #    Function treeLevel() computes an order on vertex s.t:
-  #    level(A) > level(B)  <=>  There is an arc A ---> B
-  #    (A depends on B to be activated)
-  # *  If a cycle is detected, execution is stopped
-  # *  If a parameter depends on another one not defined, execution is stopped
-  treeLevel <- function(paramName, varsTree, rootParam = paramName)
-  {
-    # The last parameter is used to record the root parameter of the
-    # recursive call in order to detect the presence of cycles.
-    vars <- varsTree[[paramName]]
-    if (length(vars) == 0) return (1) # This parameter does not have conditions
-
-    # This parameter has some conditions
-    # Recursive call: level <- MAX( level(m) : m in children )
-    maxChildLevel <- 0
-    for (child in vars) {
-      # The following line detects cycles
-      if (child == rootParam)
-        irace.error("A cycle detected in subordinate parameters! ",
-                    "Check definition of conditions and/or dependent domains.\n",
-                    "One parameter of this cycle is '", rootParam, "'")
-      
-      # The following line detects a missing definition
-      if (child %!in% names(varsTree))
-        irace.error("A parameter definition is missing! ",
-                    "Check definition of parameters.\n",
-                    "Parameter '", paramName,
-                    "' depends on '", child, "' which is not defined.")
-        
-      level <- treeLevel(child, varsTree, rootParam)
-      if (level > maxChildLevel)
-        maxChildLevel <- level
-    }
-    level <- maxChildLevel + 1
-    return (level)
-  }
 
   errReadParameters <- function(filename, line, context, ...)
   {
@@ -193,36 +224,6 @@ readParameters <- function (file, digits = 4, debugLevel = 0, text)
     }
     irace.error (paste0 (...),
                  " at ", filename, ", line ", line, context)
-  }
-
-  transform.domain <- function(transf, domain, type)
-  {
-    if (transf == "") return(transf)
-    
-    # We do not support transformation of dependent parameters, yet
-    # TODO: think about dependent domain transfomation
-    if (is.expression(domain))
-      irace.error("Parameter domain transformations are not yet available for",
-                  " dependent parameter domains.")
-
-    lower <- domain[1]
-    upper <- domain[2]
-
-    if (transf == "log") {
-      # Reject log if domain contains zero or negative values
-      if (any(domain <= 0)) return(NULL)
-
-      trLower <- log(lower)
-      # +1 to adjust before floor()
-      trUpper <- if (type == "i") log(upper + 1) else log(upper)
-      
-      irace.assert(is.finite(trLower))
-      irace.assert(is.finite(trUpper))
-      attr(transf, "lower") <- trLower
-      attr(transf, "upper") <- trUpper
-      return(transf)
-    }
-    irace.internal.error("unrecognized transformation type '", transf, "'")
   }
 
   # Checks that variables in the expressions are within
@@ -709,4 +710,211 @@ printParameters <- function(params, digits = 15L)
     if (!is.null(transf) && transf != "") type <- paste0(type, ",", transf)
     cat(sprintf('%*s %*s %s %-15s%s\n', -names_len, name, -switches_len, switch, type, domain, condition))
   }
+}
+
+#' Reads the parameters to be tuned by \pkg{irace} from a r data structure. 
+#' 
+#' 
+#' @param data A list containing the definitions of the parameters. THis list is
+#' structured as follows:
+#'  \describe{
+#'     \item{`names`}{Vector that contains the names of the parameters.}
+#'     \item{`types`}{Vector that contains the type of each parameter 'i', 'c', 'r', 'o'.
+#'       Numerical parameters can be sampled in a log-scale with 'i,log' and 'r,log'
+#'       (no spaces).}
+#'     \item{`switches`}{Vector that contains the switches to be used for the
+#'       parameters on the command line.}
+#'     \item{`domain`}{List of vectors, where each vector may contain two
+#'       values (minimum, maximum) for real and integer parameters, or
+#'       possibly more for categorical parameters.}
+#'     \item{`conditions`}{List of R logical expressions, with variables
+#'       corresponding to parameter names.}
+#'   }
+#'
+#' @param n The number of parameters as an integer (the function will not automatically 
+#' type cast it).
+#' 
+#' @return A list containing the definitions of the parameters read. The list is
+#'  structured as follows:
+#'   \describe{
+#'     \item{`names`}{Vector that contains the names of the parameters.}
+#'     \item{`types`}{Vector that contains the type of each parameter 'i', 'c', 'r', 'o'.
+#'       Numerical parameters can be sampled in a log-scale with 'i,log' and 'r,log'
+#'       (no spaces).}
+#'     \item{`switches`}{Vector that contains the switches to be used for the
+#'       parameters on the command line.}
+#'     \item{`domain`}{List of vectors, where each vector may contain two
+#'       values (minimum, maximum) for real and integer parameters, or
+#'       possibly more for categorical parameters.}
+#'     \item{`conditions`}{List of R logical expressions, with variables
+#'       corresponding to parameter names.}
+#'     \item{`isFixed`}{Logical vector that specifies which parameter is fixed
+#'       and, thus, it does not need to be tuned.}
+#'     \item{`nbParameters`}{An integer, the total number of parameters.}
+#'     \item{`nbFixed`}{An integer, the number of parameters with a fixed value.}
+#'     \item{`nbVariable`}{Number of variable (to be tuned) parameters.}
+#'     \item{`depends`}{List of character vectors, each vector specifies
+#'     which parameters depend on this one.}
+#'     \item{`isDependent`}{Logical vector that specifies which parameter has
+#'       a dependent domain.}
+#'   }
+#'
+#' @details This function is designed to used as an API for binding with other languages
+#' such as python with iracepy. As such, there is no input validation 
+#' (validations should be by the packages using it, such as iracepy). Invalid
+#' input such as different lengths for the vectors and list will result in undefined behavior. 
+#'
+#'  A fixed parameter is a parameter that should not be sampled but
+#'  instead should be always set to the only value of its domain.  In this
+#'  function we set isFixed to TRUE only if the parameter is a categorical
+#'  and has only one possible value.  If it is an integer and the minimum
+#'  and maximum are equal, or it is a real and the minimum and maximum
+#'  values satisfy `round(minimum, digits) == round(maximum, digits)`,
+#'  then the parameter description is rejected as invalid to identify
+#'  potential user errors.
+#'
+#' @examples
+#' s <- '
+#' initial_temp       "" r,log (0.02, 5e4)
+#' restart_temp_ratio "" r,log (1e-5, 1)
+#' visit              "" r     (1.001, 3)
+#' b                  "" r     ("visit", "visit + 10")
+#' accept             "" r     (-1e3, -5) | no_local_search == "ccc"
+#' no_local_search    "" o     ("","1","ccc") 
+#' '
+#' 
+#' 
+#' d = list()
+#' d$names <- c(
+#'     'initial_temp',
+#'     'restart_temp_ratio',
+#'     'visit',
+#'     'b',
+#'     'accept',
+#'     'no_local_search'
+#' )
+#' 
+#' d$switches <- c(
+#'     '',
+#'     '',
+#'     '',
+#'     '',
+#'     '',
+#'     ''
+#' )
+#' 
+#' d$types <- c(
+#'     'r,log',
+#'     'r,log',
+#'     'r',
+#'     'r',
+#'     'r',
+#'     'o'
+#' )
+#' 
+#' d$conditions <- list(
+#'     TRUE,
+#'     TRUE,
+#'     TRUE,
+#'     TRUE,
+#'     expression(no_local_search == "ccc"),
+#'     TRUE
+#' )
+#' 
+#' d$domains <- list(
+#'     c(0.02, 5e4),
+#'     c(1e-5, 1),
+#'     c(1.001, 3),
+#'     expression(visit, visit + 10),
+#'     c(-1e3, -5),
+#'     c('', '1', 'ccc')
+#' )
+#' 
+#' 
+#' 
+#' t <- readParameters(text = s, digits = 5)
+#' 
+#' u <- readParametersData(data = d, n = 6L)
+#' 
+#' identical(t, u)
+#' # The two methods of reading parameters give identical results
+#' 
+#' @author Deyao Chen
+#' @export
+readParametersData <- function (data, n) {
+  parameters <- list()
+  parameters$names <- data$names
+  parameters$types <- character(0)
+  parameters$switches <- data$switches
+  parameters$domain <- data$domain
+  parameters$conditions <- data$conditions
+
+  isFixed <- function (type, domain) {
+    type <- as.character(type)
+    if (type == "i" || type == "r") {
+      return (domain[[1]] == domain[[2]])
+    } else if (type == "c" || type == "o") {
+      return (length(domain) == 1)
+    } 
+  }
+
+  for (i in 1:n) {
+    param.type <- data$types[i]
+    param.transform <- ""
+    if (param.type == "i,log") {
+      param.type <- "i"
+      param.transform <- "log"
+    } else if (param.type == "r,log") {
+      param.type <- "r"
+      param.transform <- "log"
+    } else {
+      param.transform <- ""
+    }
+    
+    param.isFixed <- isFixed(type = param.type, domain = data$domain[[i]])
+    param.transform <- transform.domain(param.transform, data$domain[[i]], param.type)
+    
+    parameters$types[i] <- param.type
+    parameters$isFixed[i] <- param.isFixed
+    parameters$transform[[i]] <- param.transform
+  }
+
+  # Generate dependency flag
+  # FIXME: check if we really need this vector
+  parameters$isDependent <- sapply(parameters$domain, is.expression)
+
+  # Obtain the variables in each condition
+  ## FIXME: In R 3.2, all.vars does not work with byte-compiled expressions,
+  ## thus we do not byte-compile them; but we could use
+  ## all.vars(.Internal(disassemble(condition))[[3]][[1]])
+  ## LESLIE: should we make then an all.vars in utils.R so we can
+  ##   use it without problems?
+  names(parameters$types) <- 
+    names(parameters$switches) <- 
+      names(parameters$domain) <- 
+        names(parameters$isFixed) <-
+            names(parameters$transform) <-
+              names(parameters$isDependent) <- parameters$names
+  parameters$depends <- lapply(parameters$domain, all.vars)
+  # Merge dependencies and conditions
+
+  
+  conditions <- data$conditions
+  names(conditions) <- parameters$names
+  parameters$depends <- Map(c, parameters$depends, lapply(conditions, all.vars))
+  parameters$depends <- lapply(parameters$depends, unique)
+  
+  # Sort parameters in 'conditions' in the proper order according to
+  # conditions
+  hierarchyLevel <- sapply(parameters$names, treeLevel,
+                           varsTree = parameters$depends)
+  parameters$hierarchy <- hierarchyLevel
+  parameters$conditions <- conditions[order(hierarchyLevel)]
+  
+  names(parameters$hierarchy) <- parameters$names
+
+  parameters$nbParameters <- n
+  parameters$nbFixed <- sum(parameters$isFixed == TRUE)
+  parameters$nbVariable <- sum(parameters$isFixed == FALSE)
+  return(parameters)
 }
