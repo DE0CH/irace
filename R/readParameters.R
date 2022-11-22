@@ -712,27 +712,28 @@ printParameters <- function(params, digits = 15L)
   }
 }
 
-#' Reads the parameters to be tuned by \pkg{irace} from a r data structure. 
+#' Reads the parameters to be tuned by \pkg{irace} from a r data structure. This function is no user friendly
+#' because constructing the input data is error-prone and the function does not contain any input validation.
+#' Designed as a low lever interface for wrapper functions in other libraries. We recommend you use the much
+#' nicer readParameter function or whatever user friendly interface in other languages such as iracepy.
 #' 
 #' 
-#' @param data A list containing the definitions of the parameters. THis list is
-#' structured as follows:
-#'  \describe{
-#'     \item{`names`}{Vector that contains the names of the parameters.}
-#'     \item{`types`}{Vector that contains the type of each parameter 'i', 'c', 'r', 'o'.
+#' @param names Vector that contains the names of the parameters.
+#' 
+#' @param types Vector that contains the type of each parameter 'i', 'c', 'r', 'o'.
 #'       Numerical parameters can be sampled in a log-scale with 'i,log' and 'r,log'
-#'       (no spaces).}
-#'     \item{`switches`}{Vector that contains the switches to be used for the
-#'       parameters on the command line.}
-#'     \item{`domain`}{List of vectors, where each vector may contain two
-#'       values (minimum, maximum) for real and integer parameters, or
-#'       possibly more for categorical parameters.}
-#'     \item{`conditions`}{List of R logical expressions, with variables
-#'       corresponding to parameter names.}
-#'   }
+#'       (no spaces).
 #'
-#' @param n The number of parameters as an integer (the function will not automatically 
-#' type cast it).
+#' @param switches that contains the switches to be used for the
+#'       parameters on the command line.
+#' 
+#' @param domain List of vectors, where each vector may contain two
+#'       values (minimum, maximum) for real and integer parameters, or
+#'       possibly more for categorical parameters
+#' 
+#'  @param conditions List of R logical expressions, with variables
+#'       corresponding to parameter names.
+#' 
 #' 
 #' @return A list containing the definitions of the parameters read. The list is
 #'  structured as follows:
@@ -774,70 +775,102 @@ printParameters <- function(params, digits = 15L)
 #'  potential user errors.
 #'
 #' @examples
-#' s <- '
-#' initial_temp       "" r,log (0.02, 5e4)
-#' restart_temp_ratio "" r,log (1e-5, 1)
-#' visit              "" r     (1.001, 3)
-#' b                  "" r     ("visit", "visit + 10")
-#' accept             "" r     (-1e3, -5) | no_local_search == "ccc"
-#' no_local_search    "" o     ("","1","ccc") 
+# This is used to illustrate the data structure only. Please don't write code like this. 
+#' parameters.table <- '
+#' # name       switch           type  values               [conditions (using R syntax)]
+#' algorithm    "--"             c     (as,mmas,eas,ras,acs)
+#' localsearch  "--localsearch " c     (0, 1, 2, 3)
+#' alpha        "--alpha "       r     (0.00, 5.00)
+#' beta         "--beta "        r     (0.00, 10.00)
+#' rho          "--rho  "        r     (0.01, 1.00)
+#' ants         "--ants "        i,log (5, 100)
+#' q0           "--q0 "          r     (0.0, 1.0)           | algorithm == "acs"
+#' rasrank      "--rasranks "    i     (1, "min(ants, 10)") | algorithm == "ras"
+#' elitistants  "--elitistants " i     (1, ants)            | algorithm == "eas"
+#' nnls         "--nnls "        i     (5, 50)              | localsearch %in% c(1,2,3)
+#' dlb          "--dlb "         c     (0, 1)               | localsearch %in% c(1,2,3)
 #' '
 #' 
-#' 
 #' d = list()
-#' d$names <- c(
-#'     'initial_temp',
-#'     'restart_temp_ratio',
-#'     'visit',
-#'     'b',
-#'     'accept',
-#'     'no_local_search'
+#' names <- c(
+#'     'algorithm',
+#'     'localsearch',
+#'     'alpha',
+#'     'beta',
+#'     'rho',
+#'     'ants',
+#'     'q0',
+#'     'rasrank',
+#'     'elitistants',
+#'     'nnls',
+#'     'dlb'
 #' )
 #' 
-#' d$switches <- c(
-#'     '',
-#'     '',
-#'     '',
-#'     '',
-#'     '',
-#'     ''
+#' switches <- c(
+#'     '--',
+#'     '--localsearch ',
+#'     '--alpha ',
+#'     '--beta ',
+#'     '--rho  ',
+#'     '--ants ',
+#'     '--q0 ',
+#'     '--rasranks ',
+#'     '--elitistants ',
+#'     '--nnls ',
+#'     '--dlb '
 #' )
 #' 
-#' d$types <- c(
-#'     'r,log',
-#'     'r,log',
+#' types <- c(
+#'     'c',
+#'     'c',
 #'     'r',
 #'     'r',
 #'     'r',
-#'     'o'
+#'     'i,log',
+#'     'r',
+#'     'i',
+#'     'i',
+#'     'i',
+#'     'c'
 #' )
 #' 
-#' d$conditions <- list(
-#'     TRUE,
-#'     TRUE,
-#'     TRUE,
-#'     TRUE,
-#'     expression(no_local_search == "ccc"),
-#'     TRUE
-#' )
-#' 
-#' d$domains <- list(
-#'     c(0.02, 5e4),
-#'     c(1e-5, 1),
-#'     c(1.001, 3),
-#'     expression(visit, visit + 10),
-#'     c(-1e3, -5),
-#'     c('', '1', 'ccc')
+#' domain <- list(
+#'     c('as', 'mmas', 'eas', 'ras', 'acs'),
+#'     c('0', '1', '2', '3'),
+#'     c(0.0, 5.0),
+#'     c(0.0, 10.0),
+#'     c(0.01, 1.0),
+#'     c(5, 100),
+#'     c(0.0, 1.0),
+#'     expression(1, min(ants, 10)),
+#'     expression(1, ants),
+#'     c(5, 50),
+#'     c('0', '1')
 #' )
 #' 
 #' 
+#' conditions <- list(
+#'     TRUE,
+#'     TRUE,
+#'     TRUE,
+#'     TRUE,
+#'     TRUE,
+#'     TRUE,
+#'     expression(algorithm == 'acs'),
+#'     expression(algorithm == 'ras'),
+#'     expression(algorithm == 'eas'),
+#'     expression(localsearch %in% c(1, 2, 3)),
+#'     expression(localsearch %in% c(1, 2, 3))
+#' )
 #' 
-#' t <- readParameters(text = s, digits = 5)
 #' 
-#' u <- readParametersData(data = d, n = 6L)
+#' t <- readParameters(text = parameters.table, digits = 5)
+#' 
+#' u <- readParametersData(names = names, switches = switches, types = types, domain = domain, conditions = conditions)
 #' 
 #' identical(t, u)
 #' # The two methods of reading parameters give identical results
+#' 
 #' 
 #' @author Deyao Chen
 #' @export
