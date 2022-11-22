@@ -841,13 +841,14 @@ printParameters <- function(params, digits = 15L)
 #' 
 #' @author Deyao Chen
 #' @export
-readParametersData <- function (data, n) {
+readParametersData <- function (names, types, switches, domain, conditions) {
+  n <- length(names)
   parameters <- list()
-  parameters$names <- data$names
+  parameters$names <- names
   parameters$types <- character(0)
-  parameters$switches <- data$switches
-  parameters$domain <- data$domain
-  parameters$conditions <- data$conditions
+  parameters$switches <- switches
+  parameters$domain <- domain
+  parameters$conditions <- conditions
 
   isFixed <- function (type, domain) {
     type <- as.character(type)
@@ -859,7 +860,7 @@ readParametersData <- function (data, n) {
   }
 
   for (i in 1:n) {
-    param.type <- data$types[i]
+    param.type <- types[i]
     param.transform <- ""
     if (param.type == "i,log") {
       param.type <- "i"
@@ -871,8 +872,8 @@ readParametersData <- function (data, n) {
       param.transform <- ""
     }
     
-    param.isFixed <- isFixed(type = param.type, domain = data$domain[[i]])
-    param.transform <- transform.domain(param.transform, data$domain[[i]], param.type)
+    param.isFixed <- isFixed(type = param.type, domain = domain[[i]])
+    param.transform <- transform.domain(param.transform, domain[[i]], param.type)
     
     parameters$types[i] <- param.type
     parameters$isFixed[i] <- param.isFixed
@@ -898,8 +899,7 @@ readParametersData <- function (data, n) {
   parameters$depends <- lapply(parameters$domain, all.vars)
   # Merge dependencies and conditions
 
-  
-  conditions <- data$conditions
+
   names(conditions) <- parameters$names
   parameters$depends <- Map(c, parameters$depends, lapply(conditions, all.vars))
   parameters$depends <- lapply(parameters$depends, unique)
