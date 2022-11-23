@@ -40,7 +40,7 @@ readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text, c
     configurationTable <- read.table(text = text, header = TRUE,
                                      colClasses = "character",
                                      stringsAsFactors = FALSE)
-  } else if (missing(configurationFile) & !missing(filename)) {
+  } else if (missing(configurationTable) & !missing(filename)) {
     # Read the file.
     configurationTable <- read.table(filename, header = TRUE,
                                      colClasses = "character",
