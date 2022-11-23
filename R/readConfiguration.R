@@ -8,6 +8,7 @@
 #' @template arg_parameters
 #' @template arg_debuglevel
 #' @template arg_text
+#' @param configurationTable (`data.frame`) Data for the configuration as a data.frame. 
 #' 
 #' @return A data frame containing the obtained configurations. 
 #'   Each row of the data frame is a candidate configuration, 
@@ -32,19 +33,19 @@
 #' @author Manuel López-Ibáñez and Jérémie Dubois-Lacoste
 #' @export
 ## FIXME: What about digits?
-readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text)
+readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text, configurationTable)
 {
-  if (missing(filename) && !missing(text)) {
+  if (missing(configurationsTable) & missing(filename) && !missing(text)) {
     filename <- strcat("text=", deparse(substitute(text)))
     configurationTable <- read.table(text = text, header = TRUE,
                                      colClasses = "character",
                                      stringsAsFactors = FALSE)
-  } else {
+  } else if (missing(configurationFile) & !missing(filename)) {
     # Read the file.
     configurationTable <- read.table(filename, header = TRUE,
                                      colClasses = "character",
                                      stringsAsFactors = FALSE)
-  }
+  } # else do nothing
   irace.assert(is.data.frame(configurationTable))
   nbConfigurations <- nrow(configurationTable)
   # Print the table that has been read.
