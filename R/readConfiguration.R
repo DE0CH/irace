@@ -35,7 +35,7 @@
 ## FIXME: What about digits?
 readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text, configurationTable)
 {
-  if (missing(configurationsTable) & missing(filename) && !missing(text)) {
+  if (missing(configurationTable) & missing(filename) && !missing(text)) {
     filename <- strcat("text=", deparse(substitute(text)))
     configurationTable <- read.table(text = text, header = TRUE,
                                      colClasses = "character",
