@@ -45,7 +45,9 @@ readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text, c
     configurationTable <- read.table(filename, header = TRUE,
                                      colClasses = "character",
                                      stringsAsFactors = FALSE)
-  } # else do nothing
+  } else if (!missing(configurationTable)) {
+    filename <- strcat("configurationTable=", deparse(substitute(configurationTable)))
+  }
   irace.assert(is.data.frame(configurationTable))
   nbConfigurations <- nrow(configurationTable)
   # Print the table that has been read.
