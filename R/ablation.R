@@ -1,20 +1,21 @@
 .ablation.params.def <- read.table(header=TRUE, stringsAsFactors = FALSE, text="
-name            type short long          default               description
-iraceResults    p    -l    --log-file    NA                    'Path to the (.Rdata) file created by irace from which the  \"iraceResults\" object will be loaded.'
-src             i    -S    --src         1                     'Source configuration ID.'
-target          i    -T    --target      NA                    'Target configuration ID. By default the best configuration found by irace.'
-ab.params       s    -P    --params      ''                    'Specific parameter names to be used for the ablation (separated with commas). By default use all'
-type            s    -t    --type        'full'                'Type of ablation to perform: \"full\" will execute each configuration on all \"--n-instances\" to determine the best-performing one; \"racing\" will apply racing to find the best configurations.'
-n_instances     i    -n    --n-instances 1                     'Number of instances used in \"full\" ablation will be n_instances * scenario$firstTest.'
-seed            i    ''    --seed        1234567               'Integer value to use as seed for the random number generation.'
-ablationLogFile p    -o    --output-file 'log-ablation.Rdata'  'Log file to save the ablation log. If \"\", the results are not saved to a file.'
-plot            s    -p    --plot        ''                    'Output filename (.pdf) for the plot. If not given, no plot is created.'
-plot_type       s    -O    --plot-type   'mean'                'Type of plot. Supported values are \"mean\", \"boxplot\", \"rank\" or \"rank,boxplot\".'
-old_path        p    ''    --old-path    NA                    'Old path found in the log-file (.Rdata) given as input to be replaced by --new-path.'
-new_path        p    ''    --new-path    NA                    'New path to replace the path found in the log-file (.Rdata) given as input.'
-execDir         p    -e    --exec-dir    NA                    'Directory where the target runner will be run.'
-scenarioFile    p    -s    --scenario    NA                    'Scenario file to override the scenario given in the log-file (.Rdata)'
-parallel        i    ''    --parallel    NA                    'Number of calls to targetRunner to execute in parallel. Values 0 or 1 mean no parallelization.'
+name            ab  type short long          default               description
+iraceResults     0  p    -l    --log-file    NA                    'Path to the (.Rdata) file created by irace from which the  \"iraceResults\" object will be loaded.'
+src              1  i    -S    --src         1                     'Source configuration ID.'
+target           1  i    -T    --target      NA                    'Target configuration ID. By default the best configuration found by irace.'
+ab.params        1  s    -P    --params      ''                    'Specific parameter names to be used for the ablation (separated with commas). By default use all'
+type             1  s    -t    --type        'full'                'Type of ablation to perform: \"full\" will execute each configuration on all \"--n-instances\" to determine the best-performing one; \"racing\" will apply racing to find the best configurations.'
+nrep            1  i    -n    --nrep       1                     'Number of replications per instance used in \"full\" ablation.'
+seed             1  i    ''    --seed        1234567               'Integer value to use as seed for the random number generation.'
+ablationLogFile  1  p    -o    --output-file 'log-ablation.Rdata'  'Log file to save the ablation log. If \"\", the results are not saved to a file.'
+instancesFile    1  s    ''    --instances-file   'train'          'Instances file used for ablation: \"train\", \"test\" or a filename containing the list of instances.'
+plot             0  s    -p    --plot        ''                    'Output filename (.pdf) for the plot. If not given, no plot is created.'
+plot_type        0  s    -O    --plot-type   'mean'                'Type of plot. Supported values are \"mean\", \"boxplot\", \"rank\" or \"rank,boxplot\".'
+old_path         0  p    ''    --old-path    NA                    'Old path found in the log-file (.Rdata) given as input to be replaced by --new-path.'
+new_path         0  p    ''    --new-path    NA                    'New path to replace the path found in the log-file (.Rdata) given as input.'
+execDir          0  p    -e    --exec-dir    NA                    'Directory where the target runner will be run.'
+scenarioFile     0  p    -s    --scenario    NA                    'Scenario file to override the scenario given in the log-file (.Rdata)'
+parallel         0  i    ''    --parallel    NA                    'Number of calls to targetRunner to execute in parallel. Values 0 or 1 mean no parallelization.'
 ")
 
 cat_ablation_license <- function()
@@ -110,13 +111,14 @@ ablation_cmdline <- function(argv = commandArgs(trailingOnly = TRUE))
   if (!is.null(params$ab.params))
     params$ab.params <- trimws(strsplit(params$ab.params, ",", fixed=TRUE)[[1]])
 
+  # We want to select elements that actually appear in params, otherwise we get NA names.
+  ablation_params <- intersect(.ablation.params.def[.ablation.params.def$ab == 1, "name", drop=TRUE],
+                               names(params))
   ablog <- do.call(ablation,
                    args = c(list(iraceResults = iraceResults),
-                            params[c("src", "target","ab.params", "type",
-                                     "n_instances", "seed", "ablationLogFile")],
+                            params[ablation_params],
                             scenario))
   if (!is.null(params[["plot"]]) || base::interactive()) {
-    params$plot_type.params <- trimws(strsplit(params$plot_type, ",", fixed=TRUE)[[1]])
     plotAblation(ablog, pdf.file = params[["plot"]], type = params$plot_type) 
   }
   invisible(ablog)
@@ -189,10 +191,39 @@ report_duplicated_results <- function(experiments, configurations)
     df <- configurations[configurations$.ID. %in% g, , drop=FALSE]
     print(df)
     cat("Parameters with different values from the above configurations:\n")
-    df <- df[, vapply(removeConfigurationsMetaData(df), function(x) length(unique(x)) > 1L, logical(1L)), drop=FALSE]
-    print(df)
+    df <- removeConfigurationsMetaData(df)
+    print(df[, vapply(df, function(x) length(unique(x)) > 1L, logical(1L)), drop=FALSE])
   }
   dups
+}
+
+ab_generate_instances <- function(scenario, nrep, type, instancesFile)
+{
+  nrep <- suppressWarnings(as.integer(nrep))
+  if (is.na(nrep) || length(nrep) == 0 || nrep <= 0)
+    stop("'nrep' must be an integer larger than zero")
+  
+  if (nrep != 1L && type == "racing")
+    stop("'nrep' has no effect when type == 'racing'")
+
+  if (instancesFile == "test") {
+    scenario$instances <- scenario$testInstances
+  } else if (instancesFile != "train") {
+    scenario$instances <- readInstances(instancesDir = "", instancesFile = instancesFile)
+  }
+  n_inst <- length(scenario$instances)
+  instancesList <- generateInstances(scenario, n_inst * nrep)
+
+  msg <- if (instancesFile %in% c("train", "test"))
+           paste0("'", instancesFile, "' instances") else paste0("instances from '", instancesFile, "'")
+  if (n_inst > 100L) {
+    n_inst <- 100L
+    msg <- paste0(msg, " (only showing first 100)")
+  }
+  cat(sep="", "# Using ", msg, ":\n",
+      paste0(collapse="\n", scenario$instances[1L:n_inst]),
+      "\n")
+  list(instancesList=instancesList, instances=scenario$instances)
 }
 
 #' Performs ablation between two configurations (from source to target).
@@ -200,12 +231,13 @@ report_duplicated_results <- function(experiments, configurations)
 #' @description Ablation is a method for analyzing the differences between two configurations.
 #'
 #' @template arg_iraceresults
-#' @param src,target Source and target configuration IDs. By default, the first configuration ever evaluated (ID 1) is used as `src` and the best configuration found by irace is used as target.
+#' @param src,target (`integer(1)`) Source and target configuration IDs. By default, the first configuration ever evaluated (ID 1) is used as `src` and the best configuration found by irace is used as target.
 #' @param ab.params Specific parameter names to be used for the ablation. They must be in `parameters$names`. By default, use all parameters.
 #' @param type Type of ablation to perform: `"full"` will execute each configuration on all `n_instances` to determine the best-performing one; `"racing"` will apply racing to find the best configurations.
-#' @param n_instances (`integer(1)`) Number of instances used in `"full"` ablation will be `n_instances * scenario$firstTest`.
+#' @param nrep (`integer(1)`) Number of replications per instance used in `"full"` ablation.
 #' @param seed (`integer(1)`) Integer value to use as seed for the random number generation.
 #' @param ablationLogFile  (`character(1)`) Log file to save the ablation log. If `NULL`, the results are not saved to a file.
+#' @param instancesFile  (`character(1)`) Instances file used for ablation: `'train'`, `'test'` or a filename containing the list of instances.
 #' @param ... Further arguments to override scenario settings, e.g., `debugLevel`, `parallel`, etc.
 #'
 #' @references
@@ -231,20 +263,15 @@ report_duplicated_results <- function(experiments, configurations)
 #' @export
 ablation <- function(iraceResults, src = 1L, target = NULL,
                      ab.params = NULL, type = c("full", "racing"),
-                     n_instances = 1L, seed = 1234567,
-                     ablationLogFile = "log-ablation.Rdata", ...)
+                     nrep = 1L, seed = 1234567,
+                     ablationLogFile = "log-ablation.Rdata",
+                     instancesFile="train", ...)
 {
   # Input check
   if (missing(iraceResults) || is.null(iraceResults)) 
     stop("You must provide an 'iraceResults' object generated by irace or the path to the '.Rdata' file that contains this object.")
 
   type <- match.arg(type)
-  n_instances <- suppressWarnings(as.integer(n_instances))
-  if (is.na(n_instances) || length(n_instances) == 0 || n_instances <= 0)
-    stop("'n_instances' must be an integer larger than zero")
-  
-  if (n_instances != 1L && type == "racing")
-    stop("'n_instances' has no effect when type == 'racing'")
 
   if (!is.null(ablationLogFile))
     file.check(ablationLogFile, writeable = TRUE, text = 'logFile')
@@ -253,7 +280,8 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
     ablog <- list(changes = changes,
                   configurations = all_configurations,
                   experiments = results,
-                  instances   = instances,
+                  instances   = .irace$instancesList,
+                  parameters = parameters,
                   scenario    = scenario, 
                   trajectory  = trajectory,
                   best = best.configuration,
@@ -266,19 +294,6 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
   set.seed(seed)
   # Load the data of the log file
   iraceResults <- read_logfile(iraceResults)
-  if (is.null(target)) target <- iraceResults$iterationElites[length(iraceResults$iterationElites)]
-
-  irace.note ("Starting ablation from ", src, " to ", target, "\n# Seed: ", seed, "\n")
-
-  if (src %!in% iraceResults$allConfigurations$.ID.)
-    stop("Source configuration ID (", src, ") cannot be found")
-    
-  if (target %!in% iraceResults$allConfigurations$.ID.)
-    stop("Target configuration ID (", target, ") cannot be found")
-  
-  src.configuration <- iraceResults$allConfigurations[src, , drop = FALSE]
-  target.configuration <- iraceResults$allConfigurations[target, , drop = FALSE]
-
   parameters <- iraceResults$parameters
   scenario   <- iraceResults$scenario
   scenario_args <- list(...)
@@ -289,14 +304,26 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
     scenario <- modifyList(scenario, scenario_args)
   }
   scenario$logFile <- ""
-  scenario <- checkScenario (scenario)
-  startParallel(scenario)
-  on.exit(stopParallel(), add = TRUE)
+  scenario <- checkScenario(scenario)
+  # Generate instances
+  res <- ab_generate_instances(scenario, nrep, type, instancesFile)
+  .irace$instancesList <- res$instancesList
+  scenario$instances <- res$instances
 
-  n_instances <- if (type == "racing") length(scenario$instances) else n_instances * scenario$firstTest
-  instances <- generateInstances(scenario, n_instances)
-  .irace$instancesList <- instances
-    
+  if (is.null(target)) target <- iraceResults$iterationElites[length(iraceResults$iterationElites)]
+  irace.note ("Starting ablation from ", src, " to ", target, "\n# Seed: ", seed, "\n")
+  if (src %!in% iraceResults$allConfigurations$.ID.)
+    stop("Source configuration ID (", src, ") cannot be found")
+  if (target %!in% iraceResults$allConfigurations$.ID.)
+    stop("Target configuration ID (", target, ") cannot be found")
+
+  cat("# Source configuration (row number is ID):\n")
+  src.configuration <- iraceResults$allConfigurations[src, , drop = FALSE]
+  configurations.print(src.configuration)
+  cat("# Target configuration (row number is ID):\n")
+  target.configuration <- iraceResults$allConfigurations[target, , drop = FALSE]
+  configurations.print(target.configuration)
+
   # Select the parameters used for ablation
   if (is.null(ab.params)) {
     ab.params <- parameters$names
@@ -304,17 +331,11 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
     irace.error("Some of the parameters provided (", paste0(setdiff(ab.params, parameters$names), collapse=", "),
                 ") are not defined in the parameter space.")
   }
-
-  cat("# Source configuration (row number is ID):\n")
-  configurations.print(src.configuration)
-  cat("# Target configuration (row number is ID):\n")
-  configurations.print(target.configuration)
-  
   # Select parameters that are different in both configurations
   neq.params <- which(src.configuration[,ab.params] != target.configuration[,ab.params])
   
   if (length(neq.params) < 1) 
-    irace.error("Candidates are equal considering the parameters selected\n")
+    irace.error("src and target configurations are equal considering the parameters selected.\n")
   param.names <- colnames(src.configuration[,ab.params])[neq.params]
   
   # FIXME: Do we really need to override the ID?
@@ -326,27 +347,30 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
   experiments <- createExperimentList(configurations = rbind(src.configuration, target.configuration), 
                                       parameters = parameters,
                                       instances = scenario$instances,
-                                      instances.ID = instances[, "instance"],
-                                      seeds = instances[, "seed"],
+                                      instances.ID = .irace$instancesList[, "instance"],
+                                      seeds = .irace$instancesList[, "seed"],
                                       scenario = scenario,
                                       bounds = scenario$boundMax)
-  # Define variables needed
-  trajectory <- 1
-  names(trajectory) <- "source"
-  # FIXME: changes should only store the changed parameters.
-  changes <- list()
-  irace.note("Executing source and target configurations on the given instances (", nrow(instances), ")...\n")
+  irace.note("Executing source and target configurations on the given instances * nrep (", nrow(.irace$instancesList), ")...\n")
+  
+  startParallel(scenario)
+  on.exit(stopParallel(), add = TRUE)
   target.output <- execute.experiments(experiments, scenario)
   if (!is.null(scenario$targetEvaluator))
     target.output <- execute.evaluator (experiments, scenario, target.output,
                                         src.configuration)
   # Save results
   output <- sapply(target.output, getElement, "cost") 
-  results <- matrix(NA, ncol = 1, nrow = nrow(instances), 
-                    dimnames = list(seq(1,nrow(instances)), 1))
-  results[,1] <- output[1:nrow(instances)]
-  lastres <- output[(nrow(instances)+1):(2 * nrow(instances))]
+  results <- matrix(NA, ncol = 1, nrow = nrow(.irace$instancesList), 
+                    dimnames = list(seq(1,nrow(.irace$instancesList)), 1))
+  results[,1] <- output[1:nrow(.irace$instancesList)]
+  lastres <- output[(nrow(.irace$instancesList)+1):(2 * nrow(.irace$instancesList))]
   step <- 1
+  # Define variables needed
+  trajectory <- 1
+  names(trajectory) <- "source"
+  # FIXME: changes should only store the changed parameters.
+  changes <- list()
   ablog <- save_ablog(complete = FALSE)
   while (length(param.names) > 1) {
     # Generate ablation configurations
@@ -372,7 +396,7 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
       # For using capping we must set elite data
       elite.data <- list(experiments = results[,best.configuration$.ID., drop=FALSE])
       race.conf <-  rbind(best.configuration, aconfigurations)
-      .irace$next.instance <- nrow(instances) + 1
+      .irace$next.instance <- nrow(.irace$instancesList) + 1
     } else {
       #LESLIE: for now we apply the non-elitis irace when type=="racing"
       # we should define what is the standard
@@ -383,11 +407,11 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
     }
           
     irace.note("Ablation (", type, ") of ", nrow(aconfigurations),
-               " configurations on ", nrow(instances), " instances.\n")
+               " configurations on ", nrow(.irace$instancesList), " instances.\n")
     # Force the race to see all instances in "full" mode
-    if (type == "full") scenario$firstTest <- nrow(instances)
+    if (type == "full") scenario$firstTest <- nrow(.irace$instancesList)
     # FIXME: what about blockSize?
-    race.output <- elitist_race(maxExp = nrow(aconfigurations) * nrow(instances),
+    race.output <- elitist_race(maxExp = nrow(aconfigurations) * nrow(.irace$instancesList),
                                 minSurvival = 1,
                                 elite.data = elite.data,
                                 configurations = race.conf,
@@ -428,7 +452,7 @@ ablation <- function(iraceResults, src = 1L, target = NULL,
   target.configuration$.ID. <- max(all_configurations$.ID.) + 1
   all_configurations <- rbind(all_configurations, target.configuration)
   results <- cbind(results, matrix(lastres, ncol = 1,
-                                   dimnames=list(seq(1, nrow(instances)),
+                                   dimnames=list(seq(1, nrow(.irace$instancesList)),
                                                  target.configuration$.ID.)))
   trajectory <- c(trajectory, target.configuration$.ID.)
   
@@ -467,7 +491,7 @@ ablation.labels <- function(trajectory, configurations)
     labels[i] <- paste0(param.names[select], "=", current[, select], collapse = "\n")
     last <- current
   }
-  return(labels)
+  labels
 }
 
 #' Create plot from an ablation log
@@ -492,11 +516,12 @@ ablation.labels <- function(trajectory, configurations)
 #' plotAblation(ablog = logfile, type = c("rank","boxplot"))
 #' @export
 plotAblation <- function (ablog, pdf.file = NULL, pdf.width = 20,
-                          type = c("mean", "boxplot","rank"),
+                          type = c("mean", "boxplot", "rank"),
                           mar = par("mar"),
                           ylab = "Mean configuration cost", ylim = NULL,
                           ...)
 {
+  type <- trimws(unlist(strsplit(type, ",", fixed=TRUE)))
   type <- match.arg(type, several.ok = TRUE)
   if (missing(ylab) && ("rank" %in% type)) ylab <- "Rank per instance"
   

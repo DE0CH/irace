@@ -350,9 +350,10 @@ readParameters <- function (file, digits = 4, debugLevel = 0, text)
       }
 
       valid_real_bound <- function(x, digits) {
-        if (is.na(x)) return(TRUE)
+        if (is.na(x) || x == 0) return(TRUE)
         rx <- round(x, digits = digits)
-        (abs(rx - x) <= .irace_tolerance * max(1, abs(x)))
+        ((abs(rx - x) <= .irace_tolerance * max(1, abs(x)))
+          && digits >= -log10(abs(x)))
       }
 
       if (param.type == "r") {
@@ -533,11 +534,12 @@ readParameters <- function (file, digits = 4, debugLevel = 0, text)
 #'  for details.  If none of these parameters is given, \pkg{irace}
 #'  will stop with an error.
 #'
-#' **FIXME:** Forbidden configurations, default configuration and transformations ("log") are currently ignored. See <https://github.com/MLopez-Ibanez/irace/issues/31>
+#' **FIXME:** Forbidden configurations and default configuration are currently ignored. See <https://github.com/MLopez-Ibanez/irace/issues/31>
 #'
 #' @references
 #' Frank Hutter, Manuel López-Ibáñez, Chris Fawcett, Marius Thomas Lindauer, Holger H. Hoos, Kevin Leyton-Brown, and Thomas Stützle. **AClib: A Benchmark Library for Algorithm Configuration**. In P. M. Pardalos, M. G. C. Resende, C. Vogiatzis, and J. L. Walteros, editors, _Learning and Intelligent Optimization, 8th International Conference, LION 8_, volume 8426 of Lecture Notes in Computer Science, pages 36–40. Springer, Heidelberg, 2014.
 #' 
+#' @seealso [readParameters()]
 #' @examples
 #'  ## Read the parameters directly from text
 #'  pcs_table <- '
@@ -547,7 +549,7 @@ readParameters <- function (file, digits = 4, debugLevel = 0, text)
 #'  alpha        [0.00, 5.00][1]
 #'  beta         [0.00, 10.00][1]
 #'  rho          [0.01, 1.00][0.95]
-#'  ants         [5, 100][10]i
+#'  ants         [1, 100][10]il
 #'  q0           [0.0, 1.0][0]
 #'  rasrank      [1, 100][1]i
 #'  elitistants  [1, 750][1]i
@@ -585,13 +587,13 @@ read_pcs_file <- function(file, digits = 4, debugLevel = 0, text)
   for (k in seq_along(lines)) {
     if (grepl("Conditionals:", lines[k])) {
       handle_conditionals <- TRUE
-      lines[k] <- ""
+      lines[k] <- NA
     } else if (handle_conditionals) {
       matches <- regmatches(lines[k],
                             regexec("^[[:space:]]*([^[:space:]]+)[[:space:]]+\\|[[:space:]]+(.+)$",
                                     lines[k], perl=TRUE))[[1]]
       if (length(matches) > 0) {
-        lines[k] <- ""
+        lines[k] <- NA
         conditions[[matches[2]]] <- matches[3]
       }
     }
@@ -639,6 +641,7 @@ read_pcs_file <- function(file, digits = 4, debugLevel = 0, text)
   }
   output <- ""
   for (line in lines) {
+    if (is.na(line)) next
     if (grepl("^[[:space:]]*#", line) || grepl("^[[:space:]]*$", line)) {
       output <- paste0(output, line, "\n")
       next
@@ -681,7 +684,7 @@ checkParameters <- function(parameters)
 #' @param params (`list()`) Parameter object stored in `irace.Rdata` or read with `irace::readParameters()`.
 #'
 #' @param digits (`integer()`) The desired number of digits after the decimal point for real-valued parameters. Default is 15, but it should be the value in `scenario$digits`.
-#' 
+#' @seealso [readParameters()]
 #' @examples
 #'  parameters.table <- '
 #'  # name       switch           type  values               [conditions (using R syntax)]
