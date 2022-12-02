@@ -16,3 +16,4 @@ USER root
 # Project specific stuff
 RUN apt-get install -y python3 python3-pip unzip
 RUN apt-get install -y r-base r-cran-devtools
+RUN /usr/bin/R --silent --slave --no-save --no-restore -e "install.packages('languageserver', repos='https://cloud.r-project.org/')"
