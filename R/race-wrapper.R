@@ -229,6 +229,14 @@ target.evaluator.default <- function(experiment, num.configurations, all.conf.id
               call = paste(targetEvaluator, args, collapse=" ")))
 }
 
+#' Check the output of the target runner and repair it if possible. If the 
+#' output is incorrect, this function will throw an error.
+#' 
+#' @param output The output from target runner.
+#' @template arg_scenario
+#' 
+#' @return The output with its contents repaired.
+#' 
 #' @export
 check.output.target.runner <- function (output, scenario)
 {
