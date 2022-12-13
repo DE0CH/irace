@@ -229,6 +229,7 @@ target.evaluator.default <- function(experiment, num.configurations, all.conf.id
               call = paste(targetEvaluator, args, collapse=" ")))
 }
 
+#' @export
 check.output.target.runner <- function (output, scenario)
 {
   if (!is.list(output)) {
