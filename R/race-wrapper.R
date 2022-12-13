@@ -229,6 +229,15 @@ target.evaluator.default <- function(experiment, num.configurations, all.conf.id
               call = paste(targetEvaluator, args, collapse=" ")))
 }
 
+#' Check the output of the target runner and repair it if possible. If the 
+#' output is incorrect, this function will throw an error.
+#' 
+#' @param output The output from target runner.
+#' @template arg_scenario
+#' 
+#' @return The output with its contents repaired.
+#' 
+#' @export
 check.output.target.runner <- function (output, scenario)
 {
   if (!is.list(output)) {
@@ -260,18 +269,18 @@ check.output.target.runner <- function (output, scenario)
     if (!is.null(scenario$targetEvaluator)) {
       # unless using batchmode, in that case targetRunner returns neither the
       # time nor the cost.
-      if (scenario$batchmode != 0) {
+      if (!is.null(scenario$batchmode) && scenario$batchmode != 0) {
         if (!is.null(output$time) || !is.null(output$cost)) {
           err.msg <- "When batchmode != 0, the output of targetRunner must not contain a cost nor a time!"
         }
-      } else if (scenario$maxTime > 0 && is.null(output$time)) {
+      } else if (!is.null(scenario$maxTime) && scenario$maxTime > 0 && is.null(output$time)) {
         err.msg <- "The output of targetRunner must be one number 'time'!"
       } else if (!is.null(output$cost)) {
         err.msg <- "The output of targetRunner must be empty or just one number 'time'!"
       }
-    } else if (scenario$maxTime > 0 && (is.null (output$cost) || is.null(output$time))) {
+    } else if (!is.null(scenario$maxTime) && scenario$maxTime > 0 && (is.null (output$cost) || is.null(output$time))) {
       err.msg <- "The output of targetRunner must be two numbers 'cost time'!"
-    } else if (scenario$maxExperiments > 0 && is.null (output$cost)) {
+    } else if (!is.null(scenario$maxExperiments) && scenario$maxExperiments > 0 && is.null (output$cost)) {
       err.msg <- "The output of targetRunner must be one number 'cost'!"
     } else if (!is.null(output$time) && output$time < 0) {
       err.msg <- paste0("The value of time returned by targetRunner cannot be negative (", output$time, ")!")
