@@ -43,105 +43,105 @@
 #' @export
 buildCommandLine <- function(values, switches)
 {
-  irace.assert(length(values) == length(switches))
-  values <- as.list(values)
-  switches <- switches[!is.na(values)]
-  values <- values[!is.na(values)]
-  values <- format(values, digits=15, scientific=FALSE)
-  paste0(switches, values, collapse=" ")
+irace.assert(length(values) == length(switches))
+values <- as.list(values)
+switches <- switches[!is.na(values)]
+values <- values[!is.na(values)]
+values <- format(values, digits=15, scientific=FALSE)
+paste0(switches, values, collapse=" ")
 }
 
 # This function tries to convert a, possibly empty, character vector into a
 # numeric vector.
 parse.output <- function(outputRaw, verbose)
 {
-  if (verbose) { cat (outputRaw, sep = "\n") }
-  
-  # Initialize output as raw. If it is empty stays like this.
-  output <- outputRaw
-  # strsplit crashes if outputRaw == character(0)
-  if (length(outputRaw) > 0) {
-    outputRaw <- paste0(outputRaw, collapse = "\n")
-    output <- strsplit(trim(outputRaw), "[[:space:]]+")[[1]]
-  }
-  # suppressWarnings to avoid messages about NAs introduced by coercion
-  suppressWarnings (as.numeric (output))
+if (verbose) { cat (outputRaw, sep = "\n") }
+
+# Initialize output as raw. If it is empty stays like this.
+output <- outputRaw
+# strsplit crashes if outputRaw == character(0)
+if (length(outputRaw) > 0) {
+outputRaw <- paste0(outputRaw, collapse = "\n")
+output <- strsplit(trim(outputRaw), "[[:space:]]+")[[1]]
+}
+# suppressWarnings to avoid messages about NAs introduced by coercion
+suppressWarnings (as.numeric (output))
 }
 
 target.error <- function(err.msg, output, scenario, target.runner.call,
-                         target.evaluator.call = NULL)
+		 target.evaluator.call = NULL)
 {
-  if (!is.null(target.evaluator.call)) {
-    err.msg <- paste0(err.msg, "\n", .msg.prefix,
-                      "The call to targetEvaluator was:\n", target.evaluator.call)
-  }
-  if (!is.null(target.runner.call)) {
-    err.msg <- paste0(err.msg, "\n", .msg.prefix,
-                      "The call to targetRunner was:\n", target.runner.call)
-  }
-  if (is.null(output$outputRaw)) {
-    # Message for a function call.
-    # FIXME: Ideally, we should print the list as R would print it.
-    output$outputRaw <- toString(output)
-    advice.txt <- paste0(
-      "This is not a bug in irace, but means that something failed in ",
-      "a call to the targetRunner or targetEvaluator functions provided by the user.",
-      " Please check those functions carefully.")
-  } else {
-    # Message for an external script.
-    advice.txt <- paste0(
-      "This is not a bug in irace, but means that something failed when",
-      " running the command(s) above or they were terminated before completion.",
-      " Try to run the command(s) above from the execution directory '",
-      scenario$execDir, "' to investigate the issue. See also Appendix B (targetRunner troubleshooting checklist) of the User Guide (https://cran.r-project.org/package=irace/vignettes/irace-package.pdf).")
-  }
-  irace.error(err.msg, "\n", .msg.prefix,
-              "The output was:\n", paste(output$outputRaw, collapse = "\n"),
-              "\n", .msg.prefix, advice.txt)
+if (!is.null(target.evaluator.call)) {
+err.msg <- paste0(err.msg, "\n", .msg.prefix,
+	      "The call to targetEvaluator was:\n", target.evaluator.call)
+}
+if (!is.null(target.runner.call)) {
+err.msg <- paste0(err.msg, "\n", .msg.prefix,
+	      "The call to targetRunner was:\n", target.runner.call)
+}
+if (is.null(output$outputRaw)) {
+# Message for a function call.
+# FIXME: Ideally, we should print the list as R would print it.
+output$outputRaw <- toString(output)
+advice.txt <- paste0(
+"This is not a bug in irace, but means that something failed in ",
+"a call to the targetRunner or targetEvaluator functions provided by the user.",
+" Please check those functions carefully.")
+} else {
+# Message for an external script.
+advice.txt <- paste0(
+"This is not a bug in irace, but means that something failed when",
+" running the command(s) above or they were terminated before completion.",
+" Try to run the command(s) above from the execution directory '",
+scenario$execDir, "' to investigate the issue. See also Appendix B (targetRunner troubleshooting checklist) of the User Guide (https://cran.r-project.org/package=irace/vignettes/irace-package.pdf).")
+}
+irace.error(err.msg, "\n", .msg.prefix,
+      "The output was:\n", paste(output$outputRaw, collapse = "\n"),
+      "\n", .msg.prefix, advice.txt)
 }
 
 check.output.target.evaluator <- function (output, scenario, target.runner.call = NULL)
 {
-  if (!is.list(output)) {
-    target.error ("The output of targetEvaluator must be a list",
-                  list(), scenario, target.runner.call = target.runner.call)
-    return(NULL)
-  }
+if (!is.list(output)) {
+target.error ("The output of targetEvaluator must be a list",
+	  list(), scenario, target.runner.call = target.runner.call)
+return(NULL)
+}
 
-  err.msg <- output$error
-  if (is.null(err.msg)) {
-    if (is.null(output$cost)) {
-      err.msg <- "The output of targetEvaluator must contain 'cost'!"
-    } else if (is.na.nowarn (output$cost)) {
-      err.msg <- "The output of targetEvaluator is not numeric!"
-    }
-    if (scenario$batchmode != 0 && scenario$maxTime > 0) {
-      if (is.null (output$time)) {
-        err.msg <- "When batchmode != 0 and maxTime > 0, the output of targetEvaluator must be two numbers 'cost time'!"
-      } else if (is.na.nowarn(output$time)) {
-        err.msg <- "The time returned by targetEvaluator is not numeric!"
-      } else if (is.infinite(output$time)) {
-        err.msg <- "The time returned by targetEvaluator is not finite!"
-      }
-    }
-  }
+err.msg <- output$error
+if (is.null(err.msg)) {
+if (is.null(output$cost)) {
+err.msg <- "The output of targetEvaluator must contain 'cost'!"
+} else if (is.na.nowarn (output$cost)) {
+err.msg <- "The output of targetEvaluator is not numeric!"
+}
+if (scenario$batchmode != 0 && scenario$maxTime > 0) {
+if (is.null (output$time)) {
+err.msg <- "When batchmode != 0 and maxTime > 0, the output of targetEvaluator must be two numbers 'cost time'!"
+} else if (is.na.nowarn(output$time)) {
+err.msg <- "The time returned by targetEvaluator is not numeric!"
+} else if (is.infinite(output$time)) {
+err.msg <- "The time returned by targetEvaluator is not finite!"
+}
+}
+}
 
-  if (!is.null(err.msg)) {
-    target.error (err.msg, output, scenario,
-                  target.runner.call = target.runner.call,
-                  target.evaluator.call = output$call)
-  }
+if (!is.null(err.msg)) {
+target.error (err.msg, output, scenario,
+	  target.runner.call = target.runner.call,
+	  target.evaluator.call = output$call)
+}
 }
 
 exec.target.evaluator <- function (experiment, num.configurations, all.conf.id,
-                                   scenario, target.runner.call)
+			   scenario, target.runner.call)
 {
-  output <- .irace$target.evaluator(experiment, num.configurations, all.conf.id,
-                                    scenario, target.runner.call)
-  check.output.target.evaluator (output, scenario, target.runner.call = target.runner.call)
-  # Fix too small time.
-  output$time <- if (is.null(output$time)) NA else max(output$time, scenario$minMeasurableTime)
-  return (output)
+output <- .irace$target.evaluator(experiment, num.configurations, all.conf.id,
+			    scenario, target.runner.call)
+check.output.target.evaluator (output, scenario, target.runner.call = target.runner.call)
+# Fix too small time.
+output$time <- if (is.null(output$time)) NA else max(output$time, scenario$minMeasurableTime)
+return (output)
 }
 
 #' target.evaluator.default
@@ -190,43 +190,43 @@ exec.target.evaluator <- function (experiment, num.configurations, all.conf.id,
 #' @author Manuel López-Ibáñez and Jérémie Dubois-Lacoste
 #' @export
 target.evaluator.default <- function(experiment, num.configurations, all.conf.id,
-                                     scenario, target.runner.call)
+			     scenario, target.runner.call)
 {
-  configuration.id <- experiment$id.configuration
-  instance.id      <- experiment$id.instance
-  seed             <- experiment$seed
-  instance         <- experiment$instance
+configuration.id <- experiment$id.configuration
+instance.id      <- experiment$id.instance
+seed             <- experiment$seed
+instance         <- experiment$instance
 
-  debugLevel <- scenario$debugLevel
-  targetEvaluator <- scenario$targetEvaluator
-  if (as.logical(file.access(targetEvaluator, mode = 1))) {
-    irace.error ("targetEvaluator", shQuote(targetEvaluator),
-                 "cannot be found or is not executable!\n")
-  }
+debugLevel <- scenario$debugLevel
+targetEvaluator <- scenario$targetEvaluator
+if (as.logical(file.access(targetEvaluator, mode = 1))) {
+irace.error ("targetEvaluator", shQuote(targetEvaluator),
+	 "cannot be found or is not executable!\n")
+}
 
-  cwd <- setwd (scenario$execDir)
-  args <- c(configuration.id, instance.id, seed, instance, num.configurations, all.conf.id)
-  output <- runcommand(targetEvaluator, args, configuration.id, debugLevel)
-  setwd (cwd)
+cwd <- setwd (scenario$execDir)
+args <- c(configuration.id, instance.id, seed, instance, num.configurations, all.conf.id)
+output <- runcommand(targetEvaluator, args, configuration.id, debugLevel)
+setwd (cwd)
 
-  cost <- time <- NULL
-  err.msg <- output$error
-  if (is.null(err.msg)) {
-    v.output <- parse.output(output$output, verbose = (scenario$debugLevel >= 2))
-    if (length(v.output) > 2) {
-      err.msg <- paste0("The output of targetEvaluator should not be more than two numbers!")
-    } else if (length(v.output) == 0) {
-      err.msg <- paste0("The output of targetEvaluator must be at least one number 'cost'!")
-    } else if (length(v.output) == 1) {
-      cost <- v.output[1]
-    } else if (length(v.output) == 2) {
-      cost <- v.output[1]
-      time <- v.output[2]
-    }
-  }
-  return(list(cost = cost, time = time,
-              error = err.msg, outputRaw = output$output,
-              call = paste(targetEvaluator, args, collapse=" ")))
+cost <- time <- NULL
+err.msg <- output$error
+if (is.null(err.msg)) {
+v.output <- parse.output(output$output, verbose = (scenario$debugLevel >= 2))
+if (length(v.output) > 2) {
+err.msg <- paste0("The output of targetEvaluator should not be more than two numbers!")
+} else if (length(v.output) == 0) {
+err.msg <- paste0("The output of targetEvaluator must be at least one number 'cost'!")
+} else if (length(v.output) == 1) {
+cost <- v.output[1]
+} else if (length(v.output) == 2) {
+cost <- v.output[1]
+time <- v.output[2]
+}
+}
+return(list(cost = cost, time = time,
+      error = err.msg, outputRaw = output$output,
+      call = paste(targetEvaluator, args, collapse=" ")))
 }
 
 #' Check the output of the target runner and repair it if possible. If the 
@@ -238,7 +238,7 @@ target.evaluator.default <- function(experiment, num.configurations, all.conf.id
 #' @return The output with its contents repaired.
 #' 
 #' @export
-check.output.target.runner <- function (output, scenario)
+check_output_target_runner <- function (output, scenario)
 {
   if (!is.list(output)) {
     output <- list()
@@ -303,7 +303,7 @@ exec.target.runner <- function(experiment, scenario, target.runner)
   doit <- function(experiment, scenario)
   {
     x <- target.runner(experiment, scenario)
-    return (check.output.target.runner(x, scenario))
+    return (check_output_target_runner(x, scenario))
   }
   
   retries <- scenario$targetRunnerRetries
