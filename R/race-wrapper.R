@@ -527,6 +527,7 @@ execute.experiments <- function(experiments, scenario)
       scenario$targetRunnerParallel(experiments, exec.target.runner,
                                     scenario = scenario,
                                     target.runner = target.runner)
+    if (is.null(target.output)) {stop()} 
   } else if (scenario$batchmode != 0) {
     target.output <- cluster.lapply (experiments, scenario = scenario)
   } else if (parallel > 1) {
