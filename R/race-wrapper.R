@@ -190,43 +190,43 @@ return (output)
 #' @author Manuel López-Ibáñez and Jérémie Dubois-Lacoste
 #' @export
 target.evaluator.default <- function(experiment, num.configurations, all.conf.id,
-			     scenario, target.runner.call)
+                                     scenario, target.runner.call)
 {
-configuration.id <- experiment$id.configuration
-instance.id      <- experiment$id.instance
-seed             <- experiment$seed
-instance         <- experiment$instance
+  configuration.id <- experiment$id.configuration
+  instance.id      <- experiment$id.instance
+  seed             <- experiment$seed
+  instance         <- experiment$instance
 
-debugLevel <- scenario$debugLevel
-targetEvaluator <- scenario$targetEvaluator
-if (as.logical(file.access(targetEvaluator, mode = 1))) {
-irace.error ("targetEvaluator", shQuote(targetEvaluator),
-	 "cannot be found or is not executable!\n")
-}
+  debugLevel <- scenario$debugLevel
+  targetEvaluator <- scenario$targetEvaluator
+  if (as.logical(file.access(targetEvaluator, mode = 1))) {
+    irace.error ("targetEvaluator", shQuote(targetEvaluator),
+                 "cannot be found or is not executable!\n")
+  }
 
-cwd <- setwd (scenario$execDir)
-args <- c(configuration.id, instance.id, seed, instance, num.configurations, all.conf.id)
-output <- runcommand(targetEvaluator, args, configuration.id, debugLevel)
-setwd (cwd)
+  cwd <- setwd (scenario$execDir)
+  args <- c(configuration.id, instance.id, seed, instance, num.configurations, all.conf.id)
+  output <- runcommand(targetEvaluator, args, configuration.id, debugLevel)
+  setwd (cwd)
 
-cost <- time <- NULL
-err.msg <- output$error
-if (is.null(err.msg)) {
-v.output <- parse.output(output$output, verbose = (scenario$debugLevel >= 2))
-if (length(v.output) > 2) {
-err.msg <- paste0("The output of targetEvaluator should not be more than two numbers!")
-} else if (length(v.output) == 0) {
-err.msg <- paste0("The output of targetEvaluator must be at least one number 'cost'!")
-} else if (length(v.output) == 1) {
-cost <- v.output[1]
-} else if (length(v.output) == 2) {
-cost <- v.output[1]
-time <- v.output[2]
-}
-}
-return(list(cost = cost, time = time,
-      error = err.msg, outputRaw = output$output,
-      call = paste(targetEvaluator, args, collapse=" ")))
+  cost <- time <- NULL
+  err.msg <- output$error
+  if (is.null(err.msg)) {
+    v.output <- parse.output(output$output, verbose = (scenario$debugLevel >= 2))
+    if (length(v.output) > 2) {
+      err.msg <- paste0("The output of targetEvaluator should not be more than two numbers!")
+    } else if (length(v.output) == 0) {
+      err.msg <- paste0("The output of targetEvaluator must be at least one number 'cost'!")
+    } else if (length(v.output) == 1) {
+      cost <- v.output[1]
+    } else if (length(v.output) == 2) {
+      cost <- v.output[1]
+      time <- v.output[2]
+    }
+  }
+  return(list(cost = cost, time = time,
+              error = err.msg, outputRaw = output$output,
+              call = paste(targetEvaluator, args, collapse=" ")))
 }
 
 #' Check the output of the target runner and repair it if possible. If the 
