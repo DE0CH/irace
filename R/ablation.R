@@ -111,6 +111,9 @@ ablation_cmdline <- function(argv = commandArgs(trailingOnly = TRUE))
   if (!is.null(params$ab.params))
     params$ab.params <- trimws(strsplit(params$ab.params, ",", fixed=TRUE)[[1]])
 
+  # The shell may introduce extra quotes, remove them.
+  params$plot_type <- trimws(gsub("[\"']", "", params$plot_type))
+  
   # We want to select elements that actually appear in params, otherwise we get NA names.
   ablation_params <- intersect(.ablation.params.def[.ablation.params.def$ab == 1, "name", drop=TRUE],
                                names(params))
@@ -501,6 +504,7 @@ ablation.labels <- function(trajectory, configurations)
 #' @param pdf.file Output filename.
 #' @param pdf.width Width provided to create the pdf file.
 #' @param type Type of plot. Supported values are `"mean"` and `"boxplot"`. Adding `"rank"` will plot rank per instance instead of raw cost value.
+#' @param n (`integer(1)`) Number of parameters included in the plot. By default all parameters are included.
 #' @param mar Vector with the margins for the ablation plot.
 #' @param ylab Label of y-axis.
 #' @param ylim Numeric vector of length 2 giving the y-axis range. 
@@ -516,7 +520,7 @@ ablation.labels <- function(trajectory, configurations)
 #' plotAblation(ablog = logfile, type = c("rank","boxplot"))
 #' @export
 plotAblation <- function (ablog, pdf.file = NULL, pdf.width = 20,
-                          type = c("mean", "boxplot", "rank"),
+                          type = c("mean", "boxplot", "rank"), n = 0L,
                           mar = par("mar"),
                           ylab = "Mean configuration cost", ylim = NULL,
                           ...)
@@ -543,6 +547,8 @@ plotAblation <- function (ablog, pdf.file = NULL, pdf.width = 20,
   }
   
   trajectory <- ablog$trajectory
+  if (n > 0) trajectory <- trajectory[1:(n+1)]
+
   configurations <- ablog$configurations
   # Generate labels
   # FIXME: allow overriding these labels.
@@ -560,7 +566,7 @@ plotAblation <- function (ablog, pdf.file = NULL, pdf.width = 20,
     if (is.null(ylim)) ylim <- c(1L, ncol(experiments))
   }
   # FIXME: We could also show the other alternatives at each step not just the
-  # one selected. See Leonardo's thesis.
+  # one selected. See Leonardo Bezerra's thesis.
   if ("boxplot" %in% type) {
     bx <- boxplot(experiments[, trajectory], plot=FALSE)
     if (is.null(ylim)) {
@@ -581,4 +587,5 @@ plotAblation <- function (ablog, pdf.file = NULL, pdf.width = 20,
   if ("boxplot" %in% type) {
     bxp(bx, show.names = FALSE, add = TRUE)
   }
+  invisible()
 }

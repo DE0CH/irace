@@ -27,7 +27,9 @@
    should that each block should contain one instance of each class and
    `blockSize` should be set to the number of classes. (Manuel López-Ibáñez)
 
- * `plotAblation()` has a new option `type='rank'` to plot ranks per instance instead of raw cost values.  (Manuel López-Ibáñez)
+ * `plotAblation()` has several new options:  (Manuel López-Ibáñez)
+    - `type='rank'` to plot ranks per instance instead of raw cost values.
+    - `n` to limit the number of parameters shown in the plot.
 
  * The previously internal function `check.output.target.runner` is renamed to 
    `check_output_target_runner` and exported to allow users who write their own 
@@ -49,6 +51,9 @@
    of the user to do that before calling irace or within the function assigned
    to `targetRunnerParallel`.  (Manuel López-Ibáñez)
 
+ * Do not set `option(error=utils::recover())` in debug mode to avoid issues
+   when calling irace from Python. The user can set this if desired.
+                                                           (Manuel López-Ibáñez)
 
 # irace 3.5
 
