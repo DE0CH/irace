@@ -734,7 +734,7 @@ printParameters <- function(params, digits = 15L)
 #'       values (minimum, maximum) for real and integer parameters, or
 #'       possibly more for categorical parameters
 #' 
-#'  @param conditions List of R logical expressions, with variables
+#' @param conditions List of R logical expressions, with variables
 #'       corresponding to parameter names.
 #' 
 #' 

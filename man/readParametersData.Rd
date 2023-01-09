@@ -21,9 +21,9 @@ parameters on the command line.}
 
 \item{domain}{List of vectors, where each vector may contain two
 values (minimum, maximum) for real and integer parameters, or
-possibly more for categorical parameters
+possibly more for categorical parameters}
 
-@param conditions List of R logical expressions, with variables
+\item{conditions}{List of R logical expressions, with variables
 corresponding to parameter names.}
 }
 \value{
