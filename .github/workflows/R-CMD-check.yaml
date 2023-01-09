@@ -59,6 +59,7 @@ jobs:
           extra-packages: cran::XML any::rcmdcheck
           needs: check
           cache-version: 1
+          pak-version: devel
           
       - name: Install latex
         uses: r-lib/actions/setup-tinytex@v2
