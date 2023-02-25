@@ -107,12 +107,14 @@ List of command-line options:
    --exec-dir            Directory where the programs will be run. Default: ./.
 -p,--parameter-file      File that contains the description of the parameters
                          of the target algorithm. Default: ./parameters.txt.
-   --forbidden-file      File that contains a list of logical expressions that
-                         cannot be `TRUE` for any evaluated configuration. If
-                         empty or `NULL`, do not use forbidden expressions.
+   --parameter-text      A string that contains the description of the
+                         parameters of the target algorithm.
    --configurations-file  File that contains a table of initial configurations.
                          If empty or `NULL`, all initial configurations are
                          randomly generated.
+   --configurations-text  A string that contains a table of initial
+                         configurations. If empty or `NULL`, all initial
+                         configurations are randomly generated.
 -l,--log-file            File to save tuning results as an R dataset, either
                          absolute path or relative to execDir. Default:
                          ./irace.Rdata.
@@ -122,11 +124,15 @@ List of command-line options:
                          not performed.
    --train-instances-dir  Directory where training instances are located;
                          either absolute path or relative to current directory.
-                         If no `trainInstancesFiles` is provided, all the files
-                         in `trainInstancesDir` will be listed as instances.
-                         Default: ./Instances.
+                         If no `trainInstancesFiles` or `trainInstancesText` is
+                         provided, all the files in `trainInstancesDir` will be
+                         listed as instances. Default: ./Instances.
    --train-instances-file  File that contains a list of training instances and
                          optionally additional parameters for them. If
+                         `trainInstancesDir` is provided, `irace` will search
+                         for the files in this folder.
+   --train-instances-text  A string that contains a list of training instances
+                         and optionally additional parameters for them. If
                          `trainInstancesDir` is provided, `irace` will search
                          for the files in this folder.
    --sample-instances    Randomly sample the training instances or use them in
@@ -134,6 +140,8 @@ List of command-line options:
    --test-instances-dir  Directory where testing instances are located, either
                          absolute or relative to current directory.
    --test-instances-file  File containing a list of test instances and
+                         optionally additional parameters for them.
+   --test-instances-text  A string containing a list of test instances and
                          optionally additional parameters for them.
    --test-num-elites     Number of elite configurations returned by irace that
                          will be tested if test instances are provided.

@@ -69,8 +69,12 @@ List of command-line options:
 }\if{html}{\out{</div>}}
 }
 \examples{
-# ablation_cmdline("--help")
-
+ablation_cmdline("--help")
+# Find the ablation command-line executable:
+Sys.glob(file.path(system.file(package="irace", "bin"), "ablation*"))
+}
+\seealso{
+\code{\link[=plotAblation]{plotAblation()}} \code{\link[=ablation]{ablation()}}
 }
 \author{
 Manuel López-Ibáñez

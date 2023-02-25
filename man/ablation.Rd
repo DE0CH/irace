@@ -26,7 +26,7 @@ ablation(
 
 \item{type}{Type of ablation to perform: \code{"full"} will execute each configuration on all \code{n_instances} to determine the best-performing one; \code{"racing"} will apply racing to find the best configurations.}
 
-\item{nrep}{(\code{integer(1)}) Number of replications per instance used in \code{"full"} ablation.}
+\item{nrep}{(\code{integer(1)}) Number of replications per instance used in \code{"full"} ablation. When \code{nrep > 1}, each configuration will be executed \code{nrep} times on each instance with different random seeds.}
 
 \item{seed}{(\code{integer(1)}) Integer value to use as seed for the random number generation.}
 
@@ -70,7 +70,7 @@ C. Fawcett and H. H. Hoos. Analysing differences between algorithm
 configurations through ablation. Journal of Heuristics, 22(4):431–458, 2016.
 }
 \seealso{
-\code{\link[=plotAblation]{plotAblation()}}
+\code{\link[=plotAblation]{plotAblation()}} \code{\link[=ablation_cmdline]{ablation_cmdline()}}
 }
 \author{
 Leslie Pérez Cáceres and Manuel López-Ibáñez

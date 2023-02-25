@@ -53,9 +53,11 @@ cat_ablation_license <- function()
 #' cmdline_usage(.ablation.params.def)
 #' ```
 #' @template ret_ablog
+#' @seealso [plotAblation()] [ablation()]
 #' @examples
-#' # ablation_cmdline("--help")
-#' 
+#' ablation_cmdline("--help")
+#' # Find the ablation command-line executable:
+#' Sys.glob(file.path(system.file(package="irace", "bin"), "ablation*"))
 #' @author Manuel López-Ibáñez
 #' @concept ablation
 #' @export
@@ -205,14 +207,15 @@ ab_generate_instances <- function(scenario, nrep, type, instancesFile)
   nrep <- suppressWarnings(as.integer(nrep))
   if (is.na(nrep) || length(nrep) == 0 || nrep <= 0)
     stop("'nrep' must be an integer larger than zero")
-  
   if (nrep != 1L && type == "racing")
     stop("'nrep' has no effect when type == 'racing'")
-
+  if (nrep > 1L && scenario$deterministic)
+    stop("'nrep > 1' does not make sense with a deterministic scenario")
+  
   if (instancesFile == "test") {
     scenario$instances <- scenario$testInstances
   } else if (instancesFile != "train") {
-    scenario$instances <- readInstances(instancesDir = "", instancesFile = instancesFile)
+    scenario$instances <- readInstances(instancesFile = path_rel2abs(instancesFile))
   }
   n_inst <- length(scenario$instances)
   instancesList <- generateInstances(scenario, n_inst * nrep)
@@ -237,7 +240,7 @@ ab_generate_instances <- function(scenario, nrep, type, instancesFile)
 #' @param src,target (`integer(1)`) Source and target configuration IDs. By default, the first configuration ever evaluated (ID 1) is used as `src` and the best configuration found by irace is used as target.
 #' @param ab.params Specific parameter names to be used for the ablation. They must be in `parameters$names`. By default, use all parameters.
 #' @param type Type of ablation to perform: `"full"` will execute each configuration on all `n_instances` to determine the best-performing one; `"racing"` will apply racing to find the best configurations.
-#' @param nrep (`integer(1)`) Number of replications per instance used in `"full"` ablation.
+#' @param nrep (`integer(1)`) Number of replications per instance used in `"full"` ablation. When `nrep > 1`, each configuration will be executed `nrep` times on each instance with different random seeds.
 #' @param seed (`integer(1)`) Integer value to use as seed for the random number generation.
 #' @param ablationLogFile  (`character(1)`) Log file to save the ablation log. If `NULL`, the results are not saved to a file.
 #' @param instancesFile  (`character(1)`) Instances file used for ablation: `'train'`, `'test'` or a filename containing the list of instances.
@@ -248,7 +251,7 @@ ab_generate_instances <- function(scenario, nrep, type, instancesFile)
 #' configurations through ablation. Journal of Heuristics, 22(4):431–458, 2016.
 #' 
 #' @template ret_ablog
-#' @seealso [plotAblation()]
+#' @seealso [plotAblation()] [ablation_cmdline()]
 #' @examples
 #' \donttest{
 #' logfile <- system.file(package="irace", "exdata", "sann.rda")
@@ -513,11 +516,11 @@ ablation.labels <- function(trajectory, configurations)
 #'   arguments. See [graphics::plot.default()].
 #'
 #' @author Leslie Pérez Cáceres and Manuel López-Ibáñez
-#' @seealso [ablation()]
+#' @seealso [ablation()] [ablation_cmdline()]
 #' @examples
 #' logfile <- file.path(system.file(package="irace"), "exdata", "log-ablation.Rdata")
 #' plotAblation(ablog = logfile)
-#' plotAblation(ablog = logfile, type = "boxplot")
+#' plotAblation(ablog = logfile, type = "mean")
 #' plotAblation(ablog = logfile, type = c("rank","boxplot"))
 #' @concept ablation
 #' @export
