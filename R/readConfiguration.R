@@ -34,7 +34,7 @@
 ## FIXME: What about digits?
 readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text)
 {
-  if (missing(filename) && !missing(text)) {
+  if (!missing(text)) {
     filename <- strcat("text=", deparse(substitute(text)))
     configurationTable <- read.table(text = text, header = TRUE,
                                      colClasses = "character",
@@ -359,7 +359,7 @@ setup_test_instances <- function(scenario)
   if (is.null.or.empty(scenario[["testInstances"]])) {
     if (!is.null.or.empty(scenario$testInstancesDir) || 
         !is.null.or.empty(scenario$testInstancesFile) ||
-        !is.null.or.empty(scenario$trainInstancesText)) {
+        !is.null.or.empty(scenario$testInstancesText)) {
       scenario$testInstancesDir <- path_rel2abs(scenario$testInstancesDir)
       if (!is.null.or.empty(scenario$testInstancesFile)) {
         scenario$testInstancesFile <- path_rel2abs(scenario$testInstancesFile)
@@ -559,9 +559,11 @@ checkScenario <- function(scenario = defaultScenario())
       scenario$trainInstancesFile <- path_rel2abs(scenario$trainInstancesFile)
     }
     if (is.null.or.empty(scenario$trainInstancesDir)
-        && is.null.or.empty(scenario$trainInstancesFile))
-      irace.error("Both ", quote.param ("trainInstancesDir"), " and ",
-                  quote.param ("trainInstancesFile"),
+        && is.null.or.empty(scenario$trainInstancesFile)
+        && is.null.or.empty(scenario$trainInstancesText))
+      irace.error("All ", quote.param ("trainInstancesDir"), ", ",
+                  quote.param ("trainInstancesFile"), ", and ",
+                  quote.param("trainInstancesText"),
                   " are empty: No instances provided")
     
     scenario$instances <-
@@ -931,13 +933,13 @@ readInstances <- function(instancesDir = NULL, instancesFile = NULL, instancesTe
     if (!is.null.or.empty(instancesFile)) {
       irace.warning("Both instanceText and instanceFile are set. instanceText Takes precedent so ignoring instanceFile.")
     }
-    instancesFile <- strcat("text=", deparse(substitute(text)))
+    instances <- stringi::stri_split_lines1(instancesText)
   }
 
-  if (!is.null.or.empty(instancesFile)) {
-    if (is.null.or.empty(instancesText)) file.check (instancesFile, readable = TRUE, text = "instance file")
+  if (!is.null.or.empty(instancesFile) || !is.null.or.empty(instances)) {
+    if (is.null.or.empty(instancesText) && is.null(instances)) file.check (instancesFile, readable = TRUE, text = "instance file")
     # We do not warn if the last line does not finish with a newline.
-    instances <- readLines (instancesFile, warn = FALSE)
+    if (is.null(instances)) instances <- readLines (instancesFile, warn = FALSE)
     instances <- sub("#.*$", "", instances) # Remove comments
     instances <- sub("^[[:space:]]+", "", instances) # Remove leading whitespace
     instances <- instances[instances != ""] # Delete empty lines

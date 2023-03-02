@@ -477,7 +477,7 @@ allConfigurationsInit <- function(scenario, parameters)
   initConfigurations <- scenario$initConfigurations
   
   confs_from_file <- NULL
-  if (!is.null.or.empty(scenario$configurationsFile)) {
+  if (!is.null.or.empty(scenario$configurationsFile) || !is.null.or.empty(scenario$configurationsText)) {
     confs_from_file <- readConfigurationsFile(scenario$configurationsFile,
                                               parameters, scenario$debugLevel,
                                               scenario$configurationsText)

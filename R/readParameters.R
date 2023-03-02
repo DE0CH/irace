@@ -149,7 +149,7 @@ treeLevel <- function(paramName, varsTree, rootParam = paramName)
 #' @export
 readParameters <- function (file, digits = 4L, debugLevel = 0L, text)
 {
-  if (missing(file) && !missing(text)) {
+  if (!missing(text)) {
     filename <- strcat("text=", deparse(substitute(text)))
     file <- textConnection(text)
     on.exit(close(file))
