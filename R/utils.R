@@ -605,7 +605,7 @@ runcommand <- function(command, args, id, debugLevel, use_std = FALSE, timeout =
   }
   err <- NULL
   if (use_std) {
-    write(paste(c(command, args), collapse = ' '), stdout())
+    write(paste(c(command, shQuote(args)), collapse = ' '), stdout())
     output <- readLines(file("stdin"), n=1)
     if (startsWith(output, "err ")) {
       attr(output, "errmsg") <- substring(output, 5)

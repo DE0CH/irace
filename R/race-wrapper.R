@@ -400,6 +400,21 @@ expand_target_cmdline <- function(target_cmdline, experiment, targetRunner, targ
   }
   target_cmdline
 }
+
+get_cmdline_argv <- function(experiment) {
+  vars <- list(configurationID=experiment$id.configuration,
+               instanceID      = experiment$id.instance,
+               seed             = experiment$seed,
+               instance         = experiment$instance,
+               bound            = experiment$bound)  
+  res <- c()
+  for (x in names(vars)) {
+    value <- vars[[x]]
+    if (is.null(value)) value <- ""
+    res <- append(res, value)
+  }
+  res
+}
   
 run_target_runner <- function(experiment, scenario)
 {
@@ -426,6 +441,9 @@ run_target_runner <- function(experiment, scenario)
                          collapse = " "))
     if (!is.null.or.na(bound))
       args <- paste("--cutoff", bound, args)
+  } else if (use_std) {
+    args <- c(get_cmdline_argv(experiment), unname(unlist(configuration)))
+    args[is.na(args)] <- ''
   } else {
     args <- expand_target_cmdline(scenario$targetCmdline, experiment, targetRunner,
                                   targetRunnerArgs=buildCommandLine(configuration, switches))
