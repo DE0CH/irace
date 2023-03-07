@@ -597,7 +597,7 @@ dataVariance <- function(data)
   mean(colVars(zscoredata))
 }
 
-runcommand <- function(command, args, id, debugLevel, use_std = FALSE)
+runcommand <- function(command, args, id, debugLevel, use_std = FALSE, timeout = 0)
 {
   if (debugLevel >= 2L) {
     irace.note (command, " ", args, "\n")
@@ -612,14 +612,14 @@ runcommand <- function(command, args, id, debugLevel, use_std = FALSE)
     }
   } else {
     output <- withCallingHandlers(
-      tryCatch(system2(command, args, stdout = TRUE, stderr = TRUE),
-              error = function(e) {
-                err <<- c(err, paste(conditionMessage(e), collapse="\n"))
-                NULL
-              }), warning = function(w) {
-                err <<- c(err, paste(conditionMessage(w), collapse="\n"))
-                invokeRestart("muffleWarning")
-              })
+      tryCatch(system2(command, args, stdout = TRUE, stderr = TRUE, timeout = timeout),
+                error = function(e) {
+                  err <<- c(err, paste(conditionMessage(e), collapse="\n"))
+                  NULL
+                }), warning = function(w) {
+                  err <<- c(err, paste(conditionMessage(w), collapse="\n"))
+                  invokeRestart("muffleWarning")
+                })
   }
   if (is.null(output))
     output <- ""
@@ -699,7 +699,8 @@ valid_iracelog <- function(x)
 #' 
 #' @return (`list()`)
 #' @examples
-#' irace_results <- read_logfile(system.file("exdata/irace-acotsp.Rdata", package="irace", mustWork=TRUE))
+#' irace_results <- read_logfile(system.file("exdata/irace-acotsp.Rdata", package="irace",
+#'                                           mustWork=TRUE))
 #' str(irace_results)
 #' @concept analysis
 #' @export
@@ -727,7 +728,8 @@ read_logfile <- function(filename, name = "iraceResults")
 #'
 #' @return `logical(1)`
 #' @examples
-#' irace_results <- read_logfile(system.file("exdata/irace-acotsp.Rdata", package="irace", mustWork=TRUE))
+#' irace_results <- read_logfile(system.file("exdata/irace-acotsp.Rdata", package="irace",
+#'                                           mustWork=TRUE))
 #' print(has_testing_data(irace_results))
 #' @export
 has_testing_data <- function(iraceResults)

@@ -37,11 +37,13 @@ readConfigurationsFile <- function(filename, parameters, debugLevel = 0, text)
   if (!missing(text)) {
     filename <- strcat("text=", deparse(substitute(text)))
     configurationTable <- read.table(text = text, header = TRUE,
+                                     na.strings = c("NA", "<NA>"),
                                      colClasses = "character",
                                      stringsAsFactors = FALSE)
   } else {
     # Read the file.
     configurationTable <- read.table(filename, header = TRUE,
+                                     na.strings = c("NA", "<NA>"),
                                      colClasses = "character",
                                      stringsAsFactors = FALSE)
   }
@@ -285,10 +287,8 @@ readScenario <- function(filename = "", scenario = list(),
   }
 
   # First find out which file...
-  
-  no_filename_given <- filename == ""
-
-  if (no_filename_given) {
+  filename_given <- filename != ""
+  if (!filename_given) {
     filename <- path_rel2abs(params_def["scenarioFile","default"])
     if (file.exists(filename)) {
       irace.warning("A default scenario file ", shQuote(filename),
@@ -319,7 +319,7 @@ readScenario <- function(filename = "", scenario = list(),
       tryCatch(source(filename, local = scenario_env, chdir = TRUE),
                error = handle.source.error, warning = handle.source.error))
     if (debug.level >= 1) cat (" done!\n")
-  } else if (!no_filename_given) {
+  } else if (filename_given) {
     irace.error ("The scenario file ", shQuote(filename), " does not exist.")
   }
       
@@ -334,8 +334,7 @@ readScenario <- function(filename = "", scenario = list(),
   for (param in params_names) {
     if (exists (param, envir = scenario_env, inherits = FALSE)) {
       value <- get(param, envir = scenario_env, inherits = FALSE)
-      if (!is.null.or.empty(value) && is.character(value)
-          && (param %in% pathParams)) {
+      if (filename_given && !is.null.or.empty(value) && is.character(value) && (param %in% pathParams)) {
         value <- path_rel2abs(value, cwd = dirname(filename))
       }
       scenario[[param]] <- value
@@ -571,7 +570,9 @@ checkScenario <- function(scenario = defaultScenario())
                     instancesFile = scenario$trainInstancesFile,
                     instancesText = scenario$trainInstancesText)
   }
-  
+  if (length(scenario$instances) == 0 || !is.null(dim(scenario$instances))) {
+    irace.error("Instances must be a one-dimensional vector or a list. If your instances are matrices or datasets in R, you can use scenario(instances=list(data1, data2, data3)).")
+  }
   # Testing instances
   scenario <- setup_test_instances(scenario)
 
@@ -587,7 +588,7 @@ checkScenario <- function(scenario = defaultScenario())
   if (is.null.or.empty(scenario$initConfigurations)) {
     scenario$initConfigurations <- NULL
   } else if (!is.data.frame(scenario$initConfigurations) && !is.matrix(scenario$initConfigurations)) {
-    irace.error("if given, initConfigurations must be a matrix or data.frame")
+    irace.error("if given, 'initConfigurations' must be a matrix or data.frame.")
   }
   
   # We have characters everywhere, set to the right types to avoid
@@ -602,8 +603,8 @@ checkScenario <- function(scenario = defaultScenario())
     if (is.na(scenario[[param]]))
       next # Allow NA default values
     p <- suppressWarnings(as.numeric(p))
-    if (is.null(p) || is.na (p) || !is.wholenumber(p))
-      irace.error (quote.param (param), " must be an integer.")
+    if (is.null(p) || is.na (p) || !is.wholenumber(p) || p < 0)
+      irace.error (quote.param (param), " must be a non-negative integer.")
     scenario[[param]] <- as.integer(p)
   }
 
@@ -829,6 +830,7 @@ printScenario <- function(scenario)
 #'      \item{`targetRunnerLauncher`}{Executable that will be used to launch the target runner, when \code{targetRunner} cannot be executed directly (e.g., a Python script in Windows). (Default: `""`)}
 #'      \item{`targetCmdline`}{Command-line arguments provided to \code{targetRunner} (or \code{targetRunnerLauncher} if defined). The substrings \code{\{configurationID\}}, \code{\{instanceID\}},  \code{\{seed\}},  \code{\{instance\}}, and \code{\{bound\}} will be replaced by their corresponding values. The substring \code{\{targetRunnerArgs\}} will be replaced by the concatenation of the switch and value of all active parameters of the particular configuration being evaluated.  The substring \code{\{targetRunner\}}, if present, will be replaced by the value of \code{targetRunner} (useful when using \code{targetRunnerLauncher}). (Default: `"{configurationID} {instanceID} {seed} {instance} {bound} {targetRunnerArgs}"`)}
 #'      \item{`targetRunnerRetries`}{Number of times to retry a call to \code{targetRunner} if the call failed. (Default: `0`)}
+#'      \item{`targetRunnerTimeout`}{Timeout in seconds of any \code{targetRunner} call (only applies to \code{target-runner} executables not to R functions), ignored if 0. (Default: `0`)}
 #'      \item{`targetRunnerData`}{Optional data passed to \code{targetRunner}. This is ignored by the default \code{targetRunner} function, but it may be used by custom \code{targetRunner} functions to pass persistent data around. (Default: `""`)}
 #'      \item{`targetRunnerParallel`}{Optional R function to provide custom parallelization of \code{targetRunner}. (Default: `""`)}
 #'      \item{`targetEvaluator`}{Optional script or R function that provides a numeric value for each configuration. See templates/target-evaluator.tmpl (Default: `""`)}
