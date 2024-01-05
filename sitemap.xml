@@ -61,6 +61,12 @@
     <loc>https://mlopez-ibanez.github.io/irace/reference/getFinalElites.html</loc>
   </url>
   <url>
+    <loc>https://mlopez-ibanez.github.io/irace/reference/get_instanceID_seed_pairs.html</loc>
+  </url>
+  <url>
+    <loc>https://mlopez-ibanez.github.io/irace/reference/has_testing_data.html</loc>
+  </url>
+  <url>
     <loc>https://mlopez-ibanez.github.io/irace/reference/index.html</loc>
   </url>
   <url>
@@ -82,6 +88,12 @@
     <loc>https://mlopez-ibanez.github.io/irace/reference/irace.version.html</loc>
   </url>
   <url>
+    <loc>https://mlopez-ibanez.github.io/irace/reference/irace_summarise.html</loc>
+  </url>
+  <url>
+    <loc>https://mlopez-ibanez.github.io/irace/reference/multi_irace.html</loc>
+  </url>
+  <url>
     <loc>https://mlopez-ibanez.github.io/irace/reference/path_rel2abs.html</loc>
   </url>
   <url>
@@ -97,13 +109,13 @@
     <loc>https://mlopez-ibanez.github.io/irace/reference/psRace.html</loc>
   </url>
   <url>
+    <loc>https://mlopez-ibanez.github.io/irace/reference/random_seed.html</loc>
+  </url>
+  <url>
     <loc>https://mlopez-ibanez.github.io/irace/reference/readConfigurationsFile.html</loc>
   </url>
   <url>
     <loc>https://mlopez-ibanez.github.io/irace/reference/readParameters.html</loc>
-  </url>
-  <url>
-    <loc>https://mlopez-ibanez.github.io/irace/reference/readParametersData.html</loc>
   </url>
   <url>
     <loc>https://mlopez-ibanez.github.io/irace/reference/readScenario.html</loc>
